@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="/common/common :: head('404页面')"></head>
+    <body>
+        <div class="weadmin-body">
+        	<div class="weadmin-trailer">
+			  404页面
+			</div>
+        </div>
+
+        <div th:include="/common/common :: commonJS" th:remove="tag"></div>
+    </body>
+</html>

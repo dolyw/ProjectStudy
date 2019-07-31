@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+	<head th:include="/common/common :: head('后台管理')"></head>
+
+	<body>
+		<!-- 顶部开始 -->
+		<div class="container">
+			<div class="logo">
+				<a href="./index.html">后台管理</a>
+			</div>
+			<div class="left_open">
+				<i title="展开左侧栏" class="iconfont">&#xe699;</i>
+			</div>
+			<ul class="layui-nav left fast-add" lay-filter="">
+				<li class="layui-nav-item">
+					<a href="javascript:;">窗口</a>
+					<dl class="layui-nav-child">
+						<!-- 二级菜单 -->
+						<dd>
+							<a onclick="WeAdminShow('资讯','https://note.wang64.cn')"><i class="iconfont">&#xe6a2;</i>资讯</a>
+						</dd>
+						<dd>
+							<a onclick="WeAdminShow('搜索','http://www.baidu.com')"><i class="iconfont">&#xe6a8;</i>搜索</a>
+						</dd>
+						<dd>
+							<a onclick="WeAdminShow('留言','https://msg.wang64.cn')"><i class="iconfont">&#xe6b8;</i>留言</a>
+						</dd>
+					</dl>
+				</li>
+			</ul>
+			<ul class="layui-nav right" lay-filter="">
+				<li class="layui-nav-item">
+					<a href="javascript:;">随心</a>
+					<dl class="layui-nav-child">
+						<!-- 二级菜单 -->
+						<dd>
+							<a onclick="WeAdminShow('个人信息','https://wang64.cn')">个人主页</a>
+						</dd>
+						<dd>
+							<a onclick="WeAdminShow('切换帐号','./login.shtml')">切换帐号</a>
+						</dd>
+						<dd>
+							<a class="loginout" href="login.shtml">退出</a>
+						</dd>
+					</dl>
+				</li>
+				<li class="layui-nav-item to-index">
+					<a href="/">前台首页</a>
+				</li>
+			</ul>
+
+		</div>
+		<!-- 顶部结束 -->
+		<!-- 中部开始 -->
+		<!-- 左侧菜单开始 -->
+		<div class="left-nav">
+			<div id="side-nav">
+				<ul id="nav">
+					<li>
+						<a _href="./pages/welcome.shtml">
+							<i class="iconfont">&#xe726;</i>
+							<cite>我的桌面</cite>
+							<i class="iconfont nav_right">&#xe697;</i>
+						</a>
+					</li>
+
+					<li>
+						<a href="javascript:;">
+							<i class="iconfont">&#xe723;</i>
+							<cite>任务管理</cite>
+							<i class="iconfont nav_right">&#xe697;</i>
+						</a>
+						<ul class="sub-menu">
+							<li>
+								<a _href="./pages/member/list.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>任务列表</cite>
+								</a>
+							</li>
+							<li>
+								<a _href="./pages/member/del.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>任务删除</cite>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:;">
+									<i class="iconfont">&#xe6b8;</i>
+									<cite>错误页面</cite>
+									<i class="iconfont nav_right">&#xe697;</i>
+								</a>
+								<ul class="sub-menu">
+									<li>
+										<a _href="./pages/404.shtml">
+											<i class="iconfont">&#xe6a7;</i>
+											<cite>404页面</cite>
+										</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+
+					<li>
+						<a href="javascript:;">
+							<i class="iconfont">&#xe6ce;</i>
+							<cite>系统统计</cite>
+							<i class="iconfont nav_right">&#xe697;</i>
+						</a>
+						<ul class="sub-menu">
+							<li>
+								<a _href="./pages/echarts/echarts1.shtml">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>拆线图</cite>
+								</a>
+							</li>
+							<li>
+								<a _href="./pages/echarts/echarts2.shtml">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>柱状图</cite>
+								</a>
+							</li>
+							<!--<li>
+								<a _href="./pages/echarts/echarts3.shtml">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>地图</cite>
+								</a>
+							</li>-->
+							<li>
+								<a _href="./pages/echarts/echarts4.shtml">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>饼图</cite>
+								</a>
+							</li>
+							<li>
+								<a _href="./pages/echarts/echarts5.shtml">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>雷达图</cite>
+								</a>
+							</li>
+							<li>
+								<a _href="./pages/echarts/echarts6.shtml">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>K线图</cite>
+								</a>
+							</li>
+							<li>
+								<a _href="./pages/echarts/echarts7.shtml">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>热力图</cite>
+								</a>
+							</li>
+							<li>
+								<a _href="./pages/echarts/echarts8.shtml">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>仪表图</cite>
+								</a>
+							</li>
+							<!--<li>
+								<a _href="./pages/echarts/echarts9.shtml">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>地图DIY实例</cite>
+								</a>
+							</li>-->
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- <div class="x-slide_left"></div> -->
+		<!-- 左侧菜单结束 -->
+		<!-- 右侧主体开始 -->
+		<div class="page-content">
+			<div class="layui-tab tab" lay-filter="wenav_tab" id="WeTabTip" lay-allowclose="true">
+				<ul class="layui-tab-title" id="tabName">
+					<li>我的主页</li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-tab-item layui-show">
+						<iframe src="https://cmd.wang64.cn" frameborder="0" scrolling="yes" class="weIframe"></iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="page-content-bg"></div>
+		<!-- 右侧主体结束 -->
+		<!-- 中部结束 -->
+		<!-- 底部开始 -->
+		<!-- <div class="footer">
+			<div class="copyright">Copyright ©2018 WeAdmin v1.0 All Rights Reserved</div>
+		</div> -->
+		<!-- 底部结束 -->
+		<div th:include="/common/common :: commonJS" th:remove="tag"></div>
+		<script type="text/javascript" th:inline="javascript">
+			layui.config({
+			  	base: /*[[@{/js/}]]*/ './static/js/',
+			  	version: '101100'
+			}).use('admin');
+			layui.use(['jquery', 'admin'], function(){
+				var $ = layui.jquery;
+				$(function() {
+					var login = JSON.parse(localStorage.getItem("login"));
+					if (login) {
+						if(login = 0) {
+							window.location.href = /*[[@{/login.shtml}]]*/ './login.html';
+							return false;
+						} else {
+							return false;
+						}
+					} else {
+						window.location.href = /*[[@{/login.shtml}]]*/ './login.html';
+						return false;
+					}
+				});
+			});
+		</script>
+	</body>
+
+	<!--Tab菜单右键弹出菜单-->
+	<ul class="rightMenu" id="rightMenu">
+        <li data-type="fresh">刷新</li>
+        <li data-type="current">关闭当前</li>
+        <li data-type="other">关闭其它</li>
+        <li data-type="all">关闭所有</li>
+    </ul>
+
+</html>

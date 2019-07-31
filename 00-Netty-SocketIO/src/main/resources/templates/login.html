@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="/common/common :: head('登录')"></head>
+<body class="login-bg">
+    
+    <div class="login">
+        <div class="message">登录</div>
+        <div id="darkbannerwrap"></div>
+        
+        <form method="post" class="layui-form" >
+            <input name="username" type="text" lay-verType="tips" lay-verify="required" class="layui-input" placeholder="用户名" />
+            <hr class="hr15">
+            <input name="password" type="password" lay-verType="tips" lay-verify="required" class="layui-input" placeholder="密码" />
+            <hr class="hr15">
+            <input class="loginin" value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit" />
+            <hr class="hr20" >
+            <div>
+            	前端静态展示，请随意输入，即可登录
+            </div>
+        </form>
+    </div>
+
+    <div th:include="/common/common :: commonJS" th:remove="tag"></div>
+    <script type="text/javascript" th:inline="javascript">
+        layui.extend({
+            // {/}的意思即代表采用自有路径，即不跟随Base路径
+            admin: /*[[@{/js/admin}]]*/ '{/}./static/js/admin'
+        });
+        layui.use(['admin'], function() {
+            var form = layui.form, admin = layui.admin;
+            layer.msg('前端静态展示，请随意输入，即可登录', function(){
+                // 关闭后的操作
+            });
+            // 监听提交
+            form.on('submit(login)', function(data) {
+                layer.msg(JSON.stringify(data.field), function() {
+                    location.href = /*[[@{/index.shtml}]]*/ './index.html';
+                });
+                return false;
+            });
+        });   
+    </script>  
+    <!-- 底部结束 -->
+</body>
+</html>
