@@ -2,8 +2,6 @@ server:
     port: 8080
 
 spring:
-    # 开启thymeleaf必须关闭404交给异常处理器处理配置
-    # 不然无法访问静态资源
     thymeleaf:
         # 开发时关闭缓存不然没法看到实时页面
         cache: false

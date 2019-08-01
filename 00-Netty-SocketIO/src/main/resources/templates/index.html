@@ -1,228 +1,94 @@
-<!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 
-	<head th:include="/common/common :: head('后台管理')"></head>
+<head th:include="/common/common :: headJq('聊天室')"></head>
 
-	<body>
-		<!-- 顶部开始 -->
-		<div class="container">
-			<div class="logo">
-				<a href="./index.html">后台管理</a>
-			</div>
-			<div class="left_open">
-				<i title="展开左侧栏" class="iconfont">&#xe699;</i>
-			</div>
-			<ul class="layui-nav left fast-add" lay-filter="">
-				<li class="layui-nav-item">
-					<a href="javascript:;">窗口</a>
-					<dl class="layui-nav-child">
-						<!-- 二级菜单 -->
-						<dd>
-							<a onclick="WeAdminShow('资讯','https://note.wang64.cn')"><i class="iconfont">&#xe6a2;</i>资讯</a>
-						</dd>
-						<dd>
-							<a onclick="WeAdminShow('搜索','http://www.baidu.com')"><i class="iconfont">&#xe6a8;</i>搜索</a>
-						</dd>
-						<dd>
-							<a onclick="WeAdminShow('留言','https://msg.wang64.cn')"><i class="iconfont">&#xe6b8;</i>留言</a>
-						</dd>
-					</dl>
-				</li>
-			</ul>
-			<ul class="layui-nav right" lay-filter="">
-				<li class="layui-nav-item">
-					<a href="javascript:;">随心</a>
-					<dl class="layui-nav-child">
-						<!-- 二级菜单 -->
-						<dd>
-							<a onclick="WeAdminShow('个人信息','https://wang64.cn')">个人主页</a>
-						</dd>
-						<dd>
-							<a onclick="WeAdminShow('切换帐号','./login.shtml')">切换帐号</a>
-						</dd>
-						<dd>
-							<a class="loginout" href="login.shtml">退出</a>
-						</dd>
-					</dl>
-				</li>
-				<li class="layui-nav-item to-index">
-					<a href="/">前台首页</a>
-				</li>
-			</ul>
+<body>
 
-		</div>
-		<!-- 顶部结束 -->
-		<!-- 中部开始 -->
-		<!-- 左侧菜单开始 -->
-		<div class="left-nav">
-			<div id="side-nav">
-				<ul id="nav">
-					<li>
-						<a _href="./pages/welcome.shtml">
-							<i class="iconfont">&#xe726;</i>
-							<cite>我的桌面</cite>
-							<i class="iconfont nav_right">&#xe697;</i>
-						</a>
-					</li>
+	<div id="app">
+		<input id="msgContent" name="msgContent" placeholder="请输入消息">
+		<select id="msgType" name="msgType">
+			<option value="00">全部</option>
+		</select>
+		<input type="button" onclick="sendMsg()" value="发送"/>
+		<input type="button" onclick="cleanMsg()" value="清空"/>
+		<input type="button" onclick="viewMsg()" value="Vue美化版"/>
+		<ul id="msgList"></ul>
+	</div>
 
-					<li>
-						<a href="javascript:;">
-							<i class="iconfont">&#xe723;</i>
-							<cite>任务管理</cite>
-							<i class="iconfont nav_right">&#xe697;</i>
-						</a>
-						<ul class="sub-menu">
-							<li>
-								<a _href="./pages/member/list.html">
-									<i class="iconfont">&#xe6a7;</i>
-									<cite>任务列表</cite>
-								</a>
-							</li>
-							<li>
-								<a _href="./pages/member/del.html">
-									<i class="iconfont">&#xe6a7;</i>
-									<cite>任务删除</cite>
-								</a>
-							</li>
-							<li>
-								<a href="javascript:;">
-									<i class="iconfont">&#xe6b8;</i>
-									<cite>错误页面</cite>
-									<i class="iconfont nav_right">&#xe697;</i>
-								</a>
-								<ul class="sub-menu">
-									<li>
-										<a _href="./pages/404.shtml">
-											<i class="iconfont">&#xe6a7;</i>
-											<cite>404页面</cite>
-										</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</li>
+	<script type="text/javascript" th:inline="javascript">
+        var userName, socket;
+		// Socket连接
+		function initIm() {
+            userName = prompt("请输入用户名进入聊天室");
+            if ($.trim(userName)) {
+                socket = io.connect("localhost:9090", {
+                    'query': 'userName=' + userName
+                });
 
-					<li>
-						<a href="javascript:;">
-							<i class="iconfont">&#xe6ce;</i>
-							<cite>系统统计</cite>
-							<i class="iconfont nav_right">&#xe697;</i>
-						</a>
-						<ul class="sub-menu">
-							<li>
-								<a _href="./pages/echarts/echarts1.shtml">
-									<i class="iconfont">&#xe6a7;</i>
-									<cite>拆线图</cite>
-								</a>
-							</li>
-							<li>
-								<a _href="./pages/echarts/echarts2.shtml">
-									<i class="iconfont">&#xe6a7;</i>
-									<cite>柱状图</cite>
-								</a>
-							</li>
-							<!--<li>
-								<a _href="./pages/echarts/echarts3.shtml">
-									<i class="iconfont">&#xe6a7;</i>
-									<cite>地图</cite>
-								</a>
-							</li>-->
-							<li>
-								<a _href="./pages/echarts/echarts4.shtml">
-									<i class="iconfont">&#xe6a7;</i>
-									<cite>饼图</cite>
-								</a>
-							</li>
-							<li>
-								<a _href="./pages/echarts/echarts5.shtml">
-									<i class="iconfont">&#xe6a7;</i>
-									<cite>雷达图</cite>
-								</a>
-							</li>
-							<li>
-								<a _href="./pages/echarts/echarts6.shtml">
-									<i class="iconfont">&#xe6a7;</i>
-									<cite>K线图</cite>
-								</a>
-							</li>
-							<li>
-								<a _href="./pages/echarts/echarts7.shtml">
-									<i class="iconfont">&#xe6a7;</i>
-									<cite>热力图</cite>
-								</a>
-							</li>
-							<li>
-								<a _href="./pages/echarts/echarts8.shtml">
-									<i class="iconfont">&#xe6a7;</i>
-									<cite>仪表图</cite>
-								</a>
-							</li>
-							<!--<li>
-								<a _href="./pages/echarts/echarts9.shtml">
-									<i class="iconfont">&#xe6a7;</i>
-									<cite>地图DIY实例</cite>
-								</a>
-							</li>-->
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<!-- <div class="x-slide_left"></div> -->
-		<!-- 左侧菜单结束 -->
-		<!-- 右侧主体开始 -->
-		<div class="page-content">
-			<div class="layui-tab tab" lay-filter="wenav_tab" id="WeTabTip" lay-allowclose="true">
-				<ul class="layui-tab-title" id="tabName">
-					<li>我的主页</li>
-				</ul>
-				<div class="layui-tab-content">
-					<div class="layui-tab-item layui-show">
-						<iframe src="https://cmd.wang64.cn" frameborder="0" scrolling="yes" class="weIframe"></iframe>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="page-content-bg"></div>
-		<!-- 右侧主体结束 -->
-		<!-- 中部结束 -->
-		<!-- 底部开始 -->
-		<!-- <div class="footer">
-			<div class="copyright">Copyright ©2018 WeAdmin v1.0 All Rights Reserved</div>
-		</div> -->
-		<!-- 底部结束 -->
-		<div th:include="/common/common :: commonJS" th:remove="tag"></div>
-		<script type="text/javascript" th:inline="javascript">
-			layui.config({
-			  	base: /*[[@{/js/}]]*/ './static/js/',
-			  	version: '101100'
-			}).use('admin');
-			layui.use(['jquery', 'admin'], function(){
-				var $ = layui.jquery;
-				$(function() {
-					var login = JSON.parse(localStorage.getItem("login"));
-					if (login) {
-						if(login = 0) {
-							window.location.href = /*[[@{/login.shtml}]]*/ './login.html';
-							return false;
-						} else {
-							return false;
-						}
-					} else {
-						window.location.href = /*[[@{/login.shtml}]]*/ './login.html';
-						return false;
-					}
-				});
-			});
-		</script>
-	</body>
+                // 成功连接事件
+                socket.on('connect', function () {});
+                // 断开连接事件
+                socket.on('disconnect', function () {});
 
-	<!--Tab菜单右键弹出菜单-->
-	<ul class="rightMenu" id="rightMenu">
-        <li data-type="fresh">刷新</li>
-        <li data-type="current">关闭当前</li>
-        <li data-type="other">关闭其它</li>
-        <li data-type="all">关闭所有</li>
-    </ul>
+                // 监听receiveMsg接收消息事件
+                socket.on('receiveMsg', function (data) {
+                    console.log(data);
+                    var msgLi = "<li>" + moment().format('HH:mm:ss') + "&nbsp;&nbsp;&nbsp;";
+                    if (data.msgType == '00') {
+                        // 发送消息给全部人
+                        msgLi = msgLi + data.sourceUserName + ": " + data.msgContent;
+                    } else if (data.msgType == '01') {
+                        // 上线通知
+                        msgLi = msgLi +  "<span style='color: blue'>" + data.sourceUserName + "进入了聊天室</span>";
+					} else if (data.msgType == '02') {
+                        // 下线通知
+                        msgLi = msgLi +  "<span style='color: gray'>" + data.sourceUserName + "离开了聊天室</span>";
+                    }
+                    msgLi = msgLi +  "</li>";
+                    $('#msgList').append(msgLi);
+                });
+            } else {
+                alert("非法用户名");
+            }
+        }
+
+        initIm();
+
+        // 发送消息
+        function sendMsg() {
+            if ($.trim(userName)) {
+                var msgContent = $.trim($("#msgContent").val());
+                // 消息不能为空
+                if (msgContent) {
+                    socket.emit('sendMsg', {
+                        "sourceUserName": userName,
+                        "msgType": $("#msgType").val(),
+                        "msgContent": msgContent
+                    });
+                } else {
+                    alert("消息不能为空");
+                }
+                $("#msgContent").val('');
+			} else {
+                initIm();
+			}
+        }
+
+        // 清空消息
+		function cleanMsg() {
+            var result = confirm("你确定清空消息吗");
+            if (result) {
+                $('#msgList').html('');
+            }
+        }
+
+        // Vue美化版
+        function viewMsg() {
+			window.location = "/view.shtml";
+        }
+	</script>
+
+</body>
 
 </html>

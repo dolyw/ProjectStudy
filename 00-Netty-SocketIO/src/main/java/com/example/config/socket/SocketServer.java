@@ -9,6 +9,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * SpringBoot启动之后执行
  * @author dolyw.com
@@ -16,7 +20,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Order(1)
-public class SocketServerRunner implements CommandLineRunner {
+public class SocketServer implements CommandLineRunner {
 
     /**
      * logger
@@ -29,7 +33,7 @@ public class SocketServerRunner implements CommandLineRunner {
     private final SocketIOServer socketIOServer;
 
     @Autowired
-    public SocketServerRunner(SocketIOServer socketIOServer) {
+    public SocketServer(SocketIOServer socketIOServer) {
         this.socketIOServer = socketIOServer;
     }
 

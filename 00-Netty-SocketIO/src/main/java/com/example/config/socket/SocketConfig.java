@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * NettySocketConfig
  * https://tomoya92.github.io/2018/08/20/spring-boot-netty-socketio
  * https://www.cnblogs.com/z-sm/p/10461456.html
+ * https://elf8848.iteye.com/blog/1739598
  * @author dolyw.com
  * @date 2019/4/17 11:37
  */
@@ -62,7 +63,6 @@ public class SocketConfig {
         config.setPort(port);
         // 开启Socket端口复用
         com.corundumstudio.socketio.SocketConfig socketConfig = new com.corundumstudio.socketio.SocketConfig();
-        socketConfig.setSoLinger(0);
         socketConfig.setReuseAddress(true);
         config.setSocketConfig(socketConfig);
         // 连接数大小
