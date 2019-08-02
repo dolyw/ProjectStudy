@@ -39,8 +39,6 @@ server:
     port: 8080
 
 spring:
-    # 开启thymeleaf必须关闭404交给异常处理器处理配置
-    # 不然无法访问静态资源
     thymeleaf:
         # 开发时关闭缓存不然没法看到实时页面
         cache: false
@@ -441,7 +439,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 #### 预览图示
 
-
+```
+聊天图示
+```
+![聊天图示](https://docs.dolyw.com/Project/NettyStudy/image/20190802001.gif)
 
 #### 搭建参考
 
@@ -449,4 +450,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
 2. 感谢脚本小娃子的端口复用技术简单了解；重用端口；socket复用端口:[https://www.cnblogs.com/shengulong/p/10206668.html](https://www.cnblogs.com/shengulong/p/10206668.html)
 3. 感谢March On的Socket端口复用:[https://www.cnblogs.com/z-sm/p/10461456.html](https://www.cnblogs.com/z-sm/p/10461456.html)
 4. 感谢elf8848的Java Socket 几个重要的TCP/IP选项解析(一):[https://elf8848.iteye.com/blog/1739598](https://elf8848.iteye.com/blog/1739598)
-5. 感谢elf8848的Java Socket 几个重要的TCP/IP选项解析(一):[https://elf8848.iteye.com/blog/1739598](https://elf8848.iteye.com/blog/1739598)
+5. 感谢sun_t89的Spring Boot实战之netty-socketio实现简单聊天室(给指定用户推送消息):[https://blog.csdn.net/sun_t89/article/details/52060946](https://blog.csdn.net/sun_t89/article/details/52060946)
