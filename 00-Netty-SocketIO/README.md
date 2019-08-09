@@ -7,7 +7,7 @@
 - [x] `SpringBoot 2.1.3` + `Netty-SocketIO 1.7.17`基础架子完成
 - [x] `Netty-SocketIO`配置完成
 - [x] `Netty-SocketIO`完成通讯
-- [ ] ~~待补充...~~
+- [x] ~~已完成~~
 
 #### 软件架构
 
@@ -15,7 +15,7 @@
 
 #### 项目介绍
 
-##### `SpringBoot` + `Netty-SocketIO`快速简单实现一个聊天室
+##### `SpringBoot` + `Netty-SocketIO`快速简单实现一个即时通讯聊天室(服务器给页面推送消息通知)
 
 `Netty-SocketIO`是一个开源的、基于`Netty`的、`Java`版的即时消息推送项目。通过`Netty-SocketIO`，我们可以轻松的实现服务端主动向客户端推送消息的场景，比如说股票价格变化、K线图、消息提醒等。它和`WebSocket`有相同的作用，只不过`Netty-SocketIO`可支持所有的浏览器
 
