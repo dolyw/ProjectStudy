@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 /**
  * MessageDto
- * @author dolyw.com
+ *
+ * @author wliduo[i@dolyw.com]
  * @date 2019/7/31 18:57
  */
 public class MessageDto implements Serializable {
@@ -32,10 +33,12 @@ public class MessageDto implements Serializable {
     /**
      * 空构造方法
      */
-    public MessageDto() {}
+    public MessageDto() {
+    }
 
     /**
      * 构造方法
+     *
      * @param sourceUserName
      * @param targetUserName
      * @param msgType

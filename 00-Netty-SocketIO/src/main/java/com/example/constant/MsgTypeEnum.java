@@ -2,10 +2,12 @@ package com.example.constant;
 
 /**
  * 消息类型
- * @author dolyw.com
+ *
+ * @author wliduo[i@dolyw.com]
  * @date 2019/4/6 19:53
  */
 public enum MsgTypeEnum {
+
     /**
      * 全部发送
      */

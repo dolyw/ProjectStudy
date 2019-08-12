@@ -13,7 +13,8 @@ import org.springframework.context.annotation.Configuration;
  * https://tomoya92.github.io/2018/08/20/spring-boot-netty-socketio
  * https://www.cnblogs.com/z-sm/p/10461456.html
  * https://elf8848.iteye.com/blog/1739598
- * @author dolyw.com
+ *
+ * @author wliduo[i@dolyw.com]
  * @date 2019/4/17 11:37
  */
 @Configuration
@@ -50,10 +51,10 @@ public class SocketConfig {
 
     /**
      * SocketIOServer配置
+     *
      * @param
      * @return com.corundumstudio.socketio.SocketIOServer
-     * @throws
-     * @author dolyw.com
+     * @author wliduo[i@dolyw.com]
      * @date 2019/4/17 11:41
      */
     @Bean("socketIOServer")
@@ -84,10 +85,10 @@ public class SocketConfig {
 
     /**
      * 开启SocketIOServer注解支持
+     *
      * @param socketServer
-     * @throws
      * @return com.corundumstudio.socketio.annotation.SpringAnnotationScanner
-     * @author dolyw.com
+     * @author wliduo[i@dolyw.com]
      * @date 2019/7/31 18:21
      */
     @Bean

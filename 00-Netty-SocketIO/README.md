@@ -19,6 +19,13 @@
 
 `Netty-SocketIO`是一个开源的、基于`Netty`的、`Java`版的即时消息推送项目。通过`Netty-SocketIO`，我们可以轻松的实现服务端主动向客户端推送消息的场景，比如说股票价格变化、K线图、消息提醒等。它和`WebSocket`有相同的作用，只不过`Netty-SocketIO`可支持所有的浏览器
 
+#### 预览图示
+
+```
+聊天图示
+```
+![聊天图示](https://docs.dolyw.com/Project/NettyStudy/image/20190802001.gif)
+
 #### 基础架子搭建
 
 创建一个`SpringBoot 2.1.3`的`Maven`项目，这块不再详细描述，添加如下`Netty-SocketIO`依赖
@@ -100,10 +107,10 @@ public class SocketConfig {
 
     /**
      * SocketIOServer配置
+     *
      * @param
      * @return com.corundumstudio.socketio.SocketIOServer
-     * @throws
-     * @author dolyw.com
+     * @author wliduo[i@dolyw.com]
      * @date 2019/4/17 11:41
      */
     @Bean("socketIOServer")
@@ -113,7 +120,6 @@ public class SocketConfig {
         config.setPort(port);
         // 开启Socket端口复用
         com.corundumstudio.socketio.SocketConfig socketConfig = new com.corundumstudio.socketio.SocketConfig();
-        socketConfig.setSoLinger(0);
         socketConfig.setReuseAddress(true);
         config.setSocketConfig(socketConfig);
         // 连接数大小
@@ -135,10 +141,10 @@ public class SocketConfig {
 
     /**
      * 开启SocketIOServer注解支持
+     *
      * @param socketServer
-     * @throws
      * @return com.corundumstudio.socketio.annotation.SpringAnnotationScanner
-     * @author dolyw.com
+     * @author wliduo[i@dolyw.com]
      * @date 2019/7/31 18:21
      */
     @Bean
@@ -153,7 +159,8 @@ public class SocketConfig {
 ```java
 /**
  * SpringBoot启动之后执行
- * @author dolyw.com
+ *
+ * @author wliduo[i@dolyw.com]
  * @date 2019/4/17 11:45
  */
 @Component
@@ -191,9 +198,101 @@ public class SocketServer implements CommandLineRunner {
 
 先去下载socket.io.js:[https://www.bootcdn.cn/socket.io](https://www.bootcdn.cn/socket.io)，放进项目里，我是直接用的2.2.0，页面就直接用`SpringBoot`默认的`Thymeleaf`
 
+* Socket消息对象
+
+```java
+/**
+ * MessageDto
+ *
+ * @author wliduo[i@dolyw.com]
+ * @date 2019/7/31 18:57
+ */
+public class MessageDto implements Serializable {
+
+    /**
+     * 源客户端用户名
+     */
+    private String sourceUserName;
+
+    /**
+     * 目标客户端用户名
+     */
+    private String targetUserName;
+
+    /**
+     * 消息类型
+     */
+    private String msgType;
+
+    /**
+     * 消息内容
+     */
+    private String msgContent;
+
+    /**
+     * 空构造方法
+     */
+    public MessageDto() {
+    }
+
+    /**
+     * 构造方法
+     *
+     * @param sourceUserName
+     * @param targetUserName
+     * @param msgType
+     * @param msgContent
+     */
+    public MessageDto(String sourceUserName, String targetUserName, String msgType, String msgContent) {
+        this.sourceUserName = sourceUserName;
+        this.targetUserName = targetUserName;
+        this.msgType = msgType;
+        this.msgContent = msgContent;
+    }
+
+    public String getSourceUserName() {
+        return sourceUserName;
+    }
+
+    public void setSourceUserName(String sourceUserName) {
+        this.sourceUserName = sourceUserName;
+    }
+
+    public String getTargetUserName() {
+        return targetUserName;
+    }
+
+    public void setTargetUserName(String targetUserName) {
+        this.targetUserName = targetUserName;
+    }
+
+    public String getMsgType() {
+        return msgType;
+    }
+
+    public void setMsgType(String msgType) {
+        this.msgType = msgType;
+    }
+
+    public String getMsgContent() {
+        return msgContent;
+    }
+
+    public void setMsgContent(String msgContent) {
+        this.msgContent = msgContent;
+    }
+}
+```
+
 * SocketHandler事件类
 
 ```java
+/**
+ * SocketHandler
+ *
+ * @author wliduo[i@dolyw.com]
+ * @date 2019/4/17 13:42
+ */
 @Component
 public class SocketHandler {
 
@@ -227,10 +326,10 @@ public class SocketHandler {
 
     /**
      * 当客户端发起连接时调用
+     *
      * @param socketIOClient
-     * @throws
      * @return void
-     * @author dolyw.com
+     * @author wliduo[i@dolyw.com]
      * @date 2019/4/17 13:55
      */
     @OnConnect
@@ -249,10 +348,10 @@ public class SocketHandler {
 
     /**
      * 客户端断开连接时调用，刷新客户端信息
+     *
      * @param socketIOClient
-     * @throws
      * @return void
-     * @author dolyw.com
+     * @author wliduo[i@dolyw.com]
      * @date 2019/4/17 13:56
      */
     @OnDisconnect
@@ -271,12 +370,12 @@ public class SocketHandler {
 
     /**
      * sendMsg发送消息事件
+     *
      * @param socketIOClient
-     * @param ackRequest
-     * @param messageDto
-     * @throws
+	 * @param ackRequest
+	 * @param messageDto
      * @return void
-     * @author dolyw.com
+     * @author wliduo[i@dolyw.com]
      * @date 2019/8/1 11:41
      */
     @OnEvent("sendMsg")
@@ -415,14 +514,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     /**
      * 设置首页
+     *
      * @param registry
      * @return void
-     * @author dolyw.com
+     * @author wliduo[i@dolyw.com]
      * @date 2019/1/24 19:18
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/index.shtml");
+        registry.addViewController("/").setViewName("forward:/view.shtml");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
 
@@ -436,13 +536,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 ```
 运行项目src\main\java\com\example\Application.java即可，访问http://localhost:8080，开不同的浏览器窗口即可进行聊天
 ```
-
-#### 预览图示
-
-```
-聊天图示
-```
-![聊天图示](https://docs.dolyw.com/Project/NettyStudy/image/20190802001.gif)
 
 #### 搭建参考
 

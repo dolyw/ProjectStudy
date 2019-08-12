@@ -15,7 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * SpringBoot启动之后执行
- * @author dolyw.com
+ *
+ * @author wliduo[i@dolyw.com]
  * @date 2019/4/17 11:45
  */
 @Component

@@ -7,7 +7,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * 在SpringBoot2.0及Spring5.0中WebMvcConfigurerAdapter以被废弃，建议实现WebMvcConfigurer接口
- * @author dolyw.com
+ *
+ * @author wliduo[i@dolyw.com]
  * @date 2019/1/24 19:17
  */
 @Configuration
@@ -15,9 +16,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     /**
      * 设置首页
+     *
      * @param registry
      * @return void
-     * @author dolyw.com
+     * @author wliduo[i@dolyw.com]
      * @date 2019/1/24 19:18
      */
     @Override

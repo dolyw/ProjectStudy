@@ -19,7 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * SocketHandler
- * @author dolyw.com
+ *
+ * @author wliduo[i@dolyw.com]
  * @date 2019/4/17 13:42
  */
 @Component
@@ -55,10 +56,10 @@ public class SocketHandler {
 
     /**
      * 当客户端发起连接时调用
+     *
      * @param socketIOClient
-     * @throws
      * @return void
-     * @author dolyw.com
+     * @author wliduo[i@dolyw.com]
      * @date 2019/4/17 13:55
      */
     @OnConnect
@@ -77,10 +78,10 @@ public class SocketHandler {
 
     /**
      * 客户端断开连接时调用，刷新客户端信息
+     *
      * @param socketIOClient
-     * @throws
      * @return void
-     * @author dolyw.com
+     * @author wliduo[i@dolyw.com]
      * @date 2019/4/17 13:56
      */
     @OnDisconnect
@@ -99,12 +100,12 @@ public class SocketHandler {
 
     /**
      * sendMsg发送消息事件
+     *
      * @param socketIOClient
 	 * @param ackRequest
 	 * @param messageDto
-     * @throws
      * @return void
-     * @author dolyw.com
+     * @author wliduo[i@dolyw.com]
      * @date 2019/8/1 11:41
      */
     @OnEvent("sendMsg")
