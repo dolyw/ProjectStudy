@@ -64,7 +64,8 @@
                 <el-card shadow="hover" class="box-card">
                     <div slot="header" class="clearfix">
                         <span>消息列表</span>
-                        <el-button style="float: right; padding: 3px 0" @click="cleanMsg" type="text">清空消息</el-button>
+                        <el-button v-show="logOutShowFlag" style="float: right; padding: 3px 0" @click="logOut" type="text">注销</el-button>
+                        <el-button style="float: right; padding: 3px 8px" @click="cleanMsg" type="text">清空消息</el-button>
                     </div>
                     <div id="msgList" style="overflow: auto;height: 450px;">
                         <div v-for="msg in msgList" :key="msg" class="text item">
@@ -105,15 +106,26 @@
                 // 消息数据
                 msgContent: '',
                 // 消息列表
-                msgList: []
+                msgList: [],
+                // 注销按钮是否显示
+                logOutShowFlag: false
             },
             // 启动时就执行
             mounted: function() {
-                this.connect();
+                // 获取Cookie的UserName
+                var userName = getCookie('00-Netty-SocketIO-UserName');
+                if (userName) {
+                    // 存在直接连接
+                    this.userName = userName;
+                    this.connect();
+                } else {
+                    // 不存在需要输入用户名
+                    this.getUser();
+                }
             },
             methods: {
-                // 连接Socket
-                connect() {
+                // 输入用户名
+                getUser() {
                     this.$prompt('请输入用户名进入聊天室', '提示', {
                         closeOnClickModal: false,
                         confirmButtonText: '确定',
@@ -127,56 +139,62 @@
                         },
                     }).then(({value}) => {
                         this.userName = value;
-                        this.socket = io.connect("localhost:9090", {
-                            'query': 'userName=' + this.userName
-                        });
-                        // 监听receiveMsg接收消息事件
-                        this.socket.on('receiveMsg', (data) => {
-                            console.log(data);
-                            data.msgDate = moment().format('HH:mm:ss');
-                            if (data.msgType == '00') {
-                                // 发送消息给全部人
-                                this.$notify({
-                                    dangerouslyUseHTMLString: true,
-                                    title: data.sourceUserName,
-                                    message: '<b>在' + data.msgDate + '说' + data.msgContent + '</b>',
-                                    duration: 6000
-                                });
-                            } else if (data.msgType == '01') {
-                                // 上线通知
-                                this.$notify({
-                                    dangerouslyUseHTMLString: true,
-                                    title: data.sourceUserName,
-                                    message: data.msgDate + '<b>进入了聊天室</b>',
-                                    duration: 6000
-                                });
-                            } else if (data.msgType == '02') {
-                                // 下线通知
-                                this.$notify({
-                                    dangerouslyUseHTMLString: true,
-                                    title: data.sourceUserName,
-                                    message: data.msgDate + '<b>离开了聊天室</b>',
-                                    duration: 6000
-                                });
-                            }
-                            this.msgList.push(data);
-                            this.$nextTick(() => {
-                                var msgListDiv = document.getElementById('msgList');
-                                msgListDiv.scrollTop = msgListDiv.scrollHeight;
-                            })
-                        });
-                        /*this.$notify({
-                            dangerouslyUseHTMLString: true,
-                            title: this.userName,
-                            message: '<b>欢迎来到聊天室</b>',
-                            duration: 0
-                        });*/
+                        setCookie('00-Netty-SocketIO-UserName', this.userName, 1);
+                        this.connect();
                     }).catch(() => {
                         this.$message({
                             type: 'info',
                             message: '取消输入'
                         });
                     });
+                },
+                // 连接Socket
+                connect() {
+                    this.logOutShowFlag = true;
+                    this.socket = io.connect("localhost:9090", {
+                        'query': 'userName=' + this.userName
+                    });
+                    // 监听receiveMsg接收消息事件
+                    this.socket.on('receiveMsg', (data) => {
+                        // console.log(data);
+                        data.msgDate = moment().format('HH:mm:ss');
+                        if (data.msgType == '00') {
+                            // 发送消息给全部人
+                            this.$notify({
+                                dangerouslyUseHTMLString: true,
+                                title: data.sourceUserName,
+                                message: '<b>在' + data.msgDate + '说' + data.msgContent + '</b>',
+                                duration: 6000
+                            });
+                        } else if (data.msgType == '01') {
+                            // 上线通知
+                            this.$notify({
+                                dangerouslyUseHTMLString: true,
+                                title: data.sourceUserName,
+                                message: data.msgDate + '<b>进入了聊天室</b>',
+                                duration: 6000
+                            });
+                        } else if (data.msgType == '02') {
+                            // 下线通知
+                            this.$notify({
+                                dangerouslyUseHTMLString: true,
+                                title: data.sourceUserName,
+                                message: data.msgDate + '<b>离开了聊天室</b>',
+                                duration: 6000
+                            });
+                        }
+                        this.msgList.push(data);
+                        this.$nextTick(() => {
+                            var msgListDiv = document.getElementById('msgList');
+                            msgListDiv.scrollTop = msgListDiv.scrollHeight;
+                        });
+                    });
+                    /*this.$notify({
+                        dangerouslyUseHTMLString: true,
+                        title: this.userName,
+                        message: '<b>欢迎来到聊天室</b>',
+                        duration: 0
+                    });*/
                 },
                 // 发送消息
                 sendMsg() {
@@ -195,7 +213,7 @@
                         this.msgContent = '';
                         this.sendLoading = false;
                     } else {
-                        this.connect();
+                        this.getUser();
                     }
                 },
                 // 清空消息
@@ -210,10 +228,61 @@
                             this.msgList = [];
                         });
                     });
+                },
+                // 注销
+                logOut() {
+                    // 删除Cookie
+                    delCookie('00-Netty-SocketIO-UserName');
+                    // 刷新页面
+                    document.location.reload();
                 }
             }
         })
         /*]]>*/
+
+        /**
+         * 设置Cookie
+         * @param cname
+         * @param cvalue
+         * @param exdays
+         */
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toGMTString();
+            document.cookie = cname + "=" + cvalue + "; " + expires;
+        }
+
+        /**
+         * 获取Cookie
+         * @param cname
+         * @returns {string}
+         */
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i].trim();
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        /**
+         * 删除Cookie
+         * @param cname
+         */
+        function delCookie(cname) {
+            var exp = new Date();
+            exp.setTime(exp.getTime() - 1);
+            var cval = getCookie(cname);
+            if (cval) {
+                document.cookie = cname + "=" + cval + ";expires=" + exp.toGMTString();
+            }
+        }
+
     </script>
 
 </body>
