@@ -4,21 +4,21 @@
 
 #### 项目目录
 
-##### (一)`SpringBoot` + `Netty-SocketIO`快速简单实现一个即时通讯聊天室(服务器给页面推送消息通知): [https://github.com/dolyw/NettyStudy/tree/master/00-Netty-SocketIO](https://github.com/dolyw/NettyStudy/tree/master/00-Netty-SocketIO)
+##### (一)SpringBoot + Netty-SocketIO快速简单实现一个即时通讯聊天室(服务器给页面推送消息通知): [https://github.com/dolyw/NettyStudy/tree/master/00-Netty-SocketIO](https://github.com/dolyw/NettyStudy/tree/master/00-Netty-SocketIO)
 
 #### 完成进度
 
-- [x] `SpringBoot` + `Netty-SocketIO`快速简单实现一个即时通讯聊天室(服务器给页面推送消息通知)
-- [ ] 简单了解`Netty`，了解`BIO`，`NIO`，`AIO`的区别，`Netty`的三种线程模型
-- [ ] `SpringBoot`搭建`Netty-HelloWorld`
-- [ ] `SpringBoot`搭建`Netty`客户端与服务端通信
+- [x] SpringBoot + Netty-SocketIO快速简单实现一个即时通讯聊天室(服务器给页面推送消息通知)
+- [ ] 简单了解Netty，了解BIO，NIO，AIO的区别，Netty的三种线程模型
+- [ ] SpringBoot搭建Netty-HelloWorld
+- [ ] SpringBoot搭建Netty客户端与服务端通信
 - [ ] 待补充...
 
 #### 项目介绍
 
-1. `Netty`学习系列
+1. Netty学习系列
 
-先使用`Netty-SocketIO`快速简单实现一个即时通讯聊天室，在学习`Netty`后，使用`Netty`实现客户端与服务端即时通信，写一个完善的即时通讯加深对`Netty`的了解
+先使用Netty-SocketIO快速简单实现一个即时通讯聊天室，在学习Netty后，使用Netty实现客户端与服务端即时通信，写一个完善的即时通讯加深对Netty的了解
 
 #### 软件架构
 

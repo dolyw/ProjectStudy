@@ -4,22 +4,22 @@
 
 #### 完成进度
 
-- [x] `SpringBoot 2.1.3` + `Netty-SocketIO 1.7.17`基础架子完成
-- [x] `Netty-SocketIO`配置完成
-- [x] `Netty-SocketIO`完成通讯
+- [x] SpringBoot 2.1.3 + Netty-SocketIO 1.7.17基础架子完成
+- [x] Netty-SocketIO配置完成
+- [x] Netty-SocketIO完成通讯
 - [x] ~~已完成~~
 
 #### 软件架构
 
-1. `SpringBoot` + `Netty-SocketIO`
+1. SpringBoot + Netty-SocketIO + Vue + ElementUI
 
 #### 项目介绍
 
-##### `SpringBoot` + `Netty-SocketIO`快速简单实现一个即时通讯聊天室(服务器给页面推送消息通知)
+##### SpringBoot + Netty-SocketIO快速简单实现一个即时通讯聊天室(服务器给页面推送消息通知)
 
-`Netty-SocketIO`是一个开源的、基于`Netty`的、`Java`版的即时消息推送项目。通过`Netty-SocketIO`，我们可以轻松的实现服务端主动向客户端推送消息的场景，比如说股票价格变化、K线图、消息提醒等。它和`WebSocket`有相同的作用，只不过`Netty-SocketIO`可支持所有的浏览器
+Netty-SocketIO是一个开源的、基于`Netty`的、`Java`版的即时消息推送项目。通过Netty-SocketIO，我们可以轻松的实现服务端主动向客户端推送消息的场景，比如说股票价格变化、K线图、消息提醒等。它和`WebSocket`有相同的作用，只不过Netty-SocketIO可支持所有的浏览器
 
-注: ~~不能是同一个Cookie域下(同一个浏览器开多个窗口会存在问题)，得开不同的浏览器窗口才能进行正常消息推送~~，也不能是同一个用户名，不然只有最新窗口有效，当前项目还可以优化
+##### 注: ~~不能是同一个Cookie域下(同一个浏览器开多个窗口会存在问题)，得开不同的浏览器窗口才能进行正常消息推送~~，也不能是同一个用户名，不然只有最新窗口有效，当前项目还可以优化
 
 * ~~前端新窗口应该判断当前用户(Cookie)是否存在~~(已完成)
 * 用户名是否重复校验
@@ -34,7 +34,7 @@
 
 #### 基础架子搭建
 
-创建一个`SpringBoot 2.1.3`的`Maven`项目，这块不再详细描述，添加如下`Netty-SocketIO`依赖
+创建一个SpringBoot 2.1.3的`Maven`项目，这块不再详细描述，添加如下Netty-SocketIO依赖
 
 ```xml
 <netty-socketio.version>1.7.17</netty-socketio.version>
