@@ -6,12 +6,16 @@
 
 ##### (一)SpringBoot + Netty-SocketIO快速简单实现一个即时通讯聊天室(服务器给页面推送消息通知): [https://github.com/dolyw/NettyStudy/tree/master/00-Netty-SocketIO](https://github.com/dolyw/NettyStudy/tree/master/00-Netty-SocketIO)
 
+##### (二)简单了解BIO，NIO，AIO的区别，Linux的五种IO模型，认识Netty: [https://github.com/dolyw/NettyStudy/tree/master/01-Netty-GettingStarted](https://github.com/dolyw/NettyStudy/tree/master/01-Netty-GettingStarted)
+
 #### 完成进度
 
 - [x] SpringBoot + Netty-SocketIO快速简单实现一个即时通讯聊天室(服务器给页面推送消息通知)
-- [ ] 简单了解Netty，了解BIO，NIO，AIO的区别，Netty的三种线程模型
+- [ ] 简单了解BIO，NIO，AIO的区别，Linux的五种IO模型，认识Netty
+- [ ] 简单编写BIO，NIO，AIO的代码Demo
 - [ ] SpringBoot搭建Netty-HelloWorld
 - [ ] SpringBoot搭建Netty客户端与服务端通信
+- [ ] SpringBoot搭建Netty的一个完善的即时通讯
 - [ ] 待补充...
 
 #### 项目介绍
