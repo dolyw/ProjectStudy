@@ -7,12 +7,12 @@
 
 > 我的学习代码记录
 
-### 目录
+#### 目录
 
 - [Elasticsearch](#Elasticsearch)
 - [Netty](#Netty)
 
-### 其他
+#### 其他
 
 - Shiro + JWT鉴权: [ShiroJwt](https://github.com/dolyw/ShiroJwt)
 - Vue.js学习系列代码: [VueStudy](https://github.com/dolyw/VueStudy)
@@ -21,13 +21,24 @@
 
 #### Elasticsearch
 
+> [https://note.dolyw.com/elasticsearch](https://note.dolyw.com/elasticsearch)
+
 Elasticsearch以及Docker化学习系列示例代码及教程
+
+* [Elasticsearch](https://github.com/dolyw/ProjectStudy/tree/master/Elasticsearch)
+* [01-SpringBoot-ES-Local](https://github.com/dolyw/ProjectStudy/tree/master/Elasticsearch/01-SpringBoot-ES-Local)
+* [02-SpringBoot-ES-Docker](https://github.com/dolyw/ProjectStudy/tree/master/Elasticsearch/02-SpringBoot-ES-Docker)
 
 #### Netty
 
+> [https://note.dolyw.com/netty](https://note.dolyw.com/netty)
+
 Netty学习系列示例代码及教程
 
-### 参与贡献
+* [Netty](https://github.com/dolyw/ProjectStudy/tree/master/Netty)
+* [00-Netty-SocketIO](https://github.com/dolyw/ProjectStudy/tree/master/Netty/00-Netty-SocketIO)
+
+#### 参与贡献
 
 1. Fork 本项目
 2. 新建 Feat_xxx 分支

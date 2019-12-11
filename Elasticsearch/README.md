@@ -10,11 +10,11 @@
 
 * (三)安装本地**Elasticsearch**的**IK分词**插件和**拼音分词**插件:[https://note.dolyw.com/elasticsearch/02-LocalInstallationIK.html](https://note.dolyw.com/elasticsearch/02-LocalInstallationIK.html)
 
-* (四)**SpringBoot**整合**Elasticsearch**的方式(**TransportClient**、**Data-ES**、**Elasticsearch SQL**、**REST Client**):[https://github.com/dolyw/Elasticsearch/tree/master/01-SpringBoot-ES-Local](https://github.com/dolyw/Elasticsearch/tree/master/01-SpringBoot-ES-Local)
+* (四)**SpringBoot**整合**Elasticsearch**的方式(**TransportClient**、**Data-ES**、**Elasticsearch SQL**、**REST Client**): [https://github.com/dolyw/ProjectStudy/tree/master/Elasticsearch/01-SpringBoot-ES-Local](https://github.com/dolyw/ProjectStudy/tree/master/Elasticsearch/01-SpringBoot-ES-Local)
 
 * (五)**Docker**环境下搭建**Elasticsearch**，**Elasticsearch集群**，**Elasticsearch-Head**以及**IK分词**插件和**拼音分词**插件:[https://note.dolyw.com/docker/03-Elasticsearch.html](https://note.dolyw.com/docker/03-Elasticsearch.html)
 
-* (六)**SpringBoot**连接**Docker**版**Elasticsearch**:[https://github.com/dolyw/Elasticsearch/tree/master/02-SpringBoot-ES-Docker](https://github.com/dolyw/Elasticsearch/tree/master/02-SpringBoot-ES-Docker)
+* (六)**SpringBoot**连接**Docker**版**Elasticsearch**: [https://github.com/dolyw/ProjectStudy/tree/master/Elasticsearch/02-SpringBoot-ES-Docker](https://github.com/dolyw/ProjectStudy/tree/master/Elasticsearch/02-SpringBoot-ES-Docker)
 
 #### 完成进度
 

@@ -1,6 +1,6 @@
 # 01-SpringBoot-ES-Local
 
-> 目录:[https://github.com/dolyw/Elasticsearch](https://github.com/dolyw/Elasticsearch)
+> 目录: [https://github.com/dolyw/ProjectStudy](https://github.com/dolyw/ProjectStudy)
 
 #### 软件架构
 

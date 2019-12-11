@@ -1,6 +1,6 @@
 # 00-Netty-SocketIO
 
-> 目录:[https://github.com/dolyw/NettyStudy](https://github.com/dolyw/NettyStudy)
+> 目录:[https://github.com/dolyw/ProjectStudy](https://github.com/dolyw/ProjectStudy)
 
 #### 完成进度
 

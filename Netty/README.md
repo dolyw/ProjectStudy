@@ -4,9 +4,9 @@
 
 #### 项目目录
 
-##### (一)SpringBoot + Netty-SocketIO快速简单实现一个即时通讯聊天室(服务器给页面推送消息通知): [https://github.com/dolyw/NettyStudy/tree/master/00-Netty-SocketIO](https://github.com/dolyw/NettyStudy/tree/master/00-Netty-SocketIO)
+##### (一)SpringBoot + Netty-SocketIO快速简单实现一个即时通讯聊天室(服务器给页面推送消息通知): [https://github.com/dolyw/ProjectStudy/tree/master/Netty/00-Netty-SocketIO](https://github.com/dolyw/ProjectStudy/tree/master/Netty/00-Netty-SocketIO)
 
-##### (二)简单了解BIO，NIO，AIO的区别，Linux的五种IO模型，认识Netty: [https://github.com/dolyw/NettyStudy/tree/master/01-Netty-GettingStarted](https://github.com/dolyw/NettyStudy/tree/master/01-Netty-GettingStarted)
+##### (二)简单了解BIO，NIO，AIO的区别，Linux的五种IO模型，认识Netty: [https://github.com/dolyw/ProjectStudy/tree/master/Netty/01-Netty-GettingStarted](https://github.com/dolyw/ProjectStudy/tree/master/Netty/01-Netty-GettingStarted)
 
 #### 完成进度
 

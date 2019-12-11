@@ -1,6 +1,6 @@
 # 01-Netty-GettingStarted
 
-> 目录:[https://github.com/dolyw/NettyStudy](https://github.com/dolyw/NettyStudy)
+> 目录:[https://github.com/dolyw/ProjectStudy](https://github.com/dolyw/ProjectStudy)
 
 #### 搭建参考
 
