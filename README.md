@@ -1,42 +1,33 @@
-# NettyStudy
+# ProjectStudy
 
-> A NettyStudy Project
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/dolyw/ProjectStudy/pulls)
+[![GitHub stars](https://img.shields.io/github/stars/dolyw/ProjectStudy.svg?style=social&label=Stars)](https://github.com/dolyw/ProjectStudy)
+[![GitHub forks](https://img.shields.io/github/forks/dolyw/ProjectStudy.svg?style=social&label=Fork)](https://github.com/dolyw/ProjectStudy)
 
-#### 项目目录
+> 我的学习代码记录
 
-##### (一)SpringBoot + Netty-SocketIO快速简单实现一个即时通讯聊天室(服务器给页面推送消息通知): [https://github.com/dolyw/NettyStudy/tree/master/00-Netty-SocketIO](https://github.com/dolyw/NettyStudy/tree/master/00-Netty-SocketIO)
+### 目录
 
-##### (二)简单了解BIO，NIO，AIO的区别，Linux的五种IO模型，认识Netty: [https://github.com/dolyw/NettyStudy/tree/master/01-Netty-GettingStarted](https://github.com/dolyw/NettyStudy/tree/master/01-Netty-GettingStarted)
+- [Elasticsearch](#Elasticsearch)
+- [Netty](#Netty)
 
-#### 完成进度
+### 其他
 
-- [x] SpringBoot + Netty-SocketIO快速简单实现一个即时通讯聊天室(服务器给页面推送消息通知)
-- [ ] 简单了解BIO，NIO，AIO的区别，Linux的五种IO模型，认识Netty
-- [ ] 简单编写BIO，NIO，AIO的代码Demo
-- [ ] SpringBoot搭建Netty-HelloWorld
-- [ ] SpringBoot搭建Netty客户端与服务端通信
-- [ ] SpringBoot搭建Netty的一个完善的即时通讯
-- [ ] 待补充...
+- Shiro + JWT鉴权: [ShiroJwt](https://github.com/dolyw/ShiroJwt)
+- Vue.js学习系列代码: [VueStudy](https://github.com/dolyw/VueStudy)
+- 一个简单的秒杀架构的演变: [SeckillEvolution](https://github.com/dolyw/SeckillEvolution)
+- 可视化DIY模板代码生成系统: [ViewGenerator](https://github.com/dolyw/ViewGenerator)
 
-#### 项目介绍
+#### Elasticsearch
 
-1. Netty学习系列
+Elasticsearch以及Docker化学习系列示例代码及教程
 
-先使用Netty-SocketIO快速简单实现一个即时通讯聊天室，在学习Netty后，使用Netty实现客户端与服务端即时通信，写一个完善的即时通讯加深对Netty的了解
+#### Netty
 
-#### 软件架构
+Netty学习系列示例代码及教程
 
-1. xxxx
-
-#### 安装教程
-
-1. xxxx
-
-#### 使用说明
-
-1. xxxx
-
-#### 参与贡献
+### 参与贡献
 
 1. Fork 本项目
 2. 新建 Feat_xxx 分支

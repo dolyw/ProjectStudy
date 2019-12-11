@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="/common/common :: headVue('随心')"></head>
+
+<style>
+
+	.clearfix:before,
+	.clearfix:after {
+		display: table;
+		content: "";
+	}
+	.clearfix:after {
+		clear: both
+	}
+
+	/* 谷歌浏览器滚动条美化 */
+	::-webkit-scrollbar {
+		width: 15px;
+		height: 15px;
+	}
+
+	::-webkit-scrollbar-track,
+	::-webkit-scrollbar-thumb {
+		border-radius: 999px;
+		border: 5px solid transparent;
+	}
+
+	::-webkit-scrollbar-track {
+		box-shadow: 1px 1px 5px rgba(143, 143, 143, 0.2) inset;
+	}
+
+	::-webkit-scrollbar-thumb {
+		min-height: 20px;
+		background-clip: content-box;
+		box-shadow: 0 0 0 5px rgba(143, 143, 143, 0.466) inset;
+	}
+
+	::-webkit-scrollbar-corner {
+		background: transparent;
+	}
+
+</style>
+
+<body>
+
+<div id="app">
+
+	<el-card>
+
+		<div slot="header" class="clearfix">
+			<span>Elasticsearch的CURD</span>
+		</div>
+
+		<!-- 查询表单 -->
+		<el-form :inline="true" :model="searchForm" label-width="90px" size="small">
+
+			<el-form-item>
+				<el-input placeholder="请输入查询关键字" @keyup.enter.native="list(searchForm)" v-model="searchForm.keyword" clearable></el-input>
+				<el-input v-show="false" placeholder="请输入查询关键字" @keyup.enter.native="list(searchForm)" v-model="searchForm.keyword" clearable></el-input>
+			</el-form-item>
+
+			<el-form-item>
+				<el-button icon="el-icon-search" plain @click="list(searchForm)">查询</el-button>
+			</el-form-item>
+
+			<el-form-item>
+				<el-button type="info" plain icon="el-icon-plus" @click="preAdd" :loading="genLoading">添加</el-button>
+			</el-form-item>
+
+		</el-form>
+
+		<!-- 数据表格 -->
+		<el-table v-loading="tableLoading" :data="tableData" @selection-change="handleSelectionChange" border>
+			<!--<el-table-column type="selection" align="center" width="55"></el-table-column>-->
+			<el-table-column type="index" align="center" min-width="60"></el-table-column>
+			<el-table-column prop="id" label="ID" align="center" min-width="100" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="name" label="名称" align="center" min-width="100" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="content" label="内容" align="center" min-width="80" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="describe" label="描述" align="center" min-width="80" show-overflow-tooltip></el-table-column>
+			<!--<el-table-column prop="createTime" label="创建时间" align="center" min-width="100" show-overflow-tooltip>
+				<template slot-scope="scope">
+					{{ moment(scope.row.createTime).format('YYYY-MM-DD HH:mm:ss') }}
+				</template>
+			</el-table-column>-->
+			<el-table-column label="操作" align="center" fixed="right" min-width="60">
+				<template slot-scope="scope">
+					<el-button size="mini" icon="el-icon-edit" type="primary" plain @click="preById(scope.row)" :loading="genLoading">修改</el-button>
+					<el-button size="mini" icon="el-icon-delete" type="danger" plain @click="delById(scope.row)" :loading="genLoading">删除</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+		<div align="right" style="margin-top: 20px;">
+			<el-pagination
+				:current-page="searchForm.page"
+				:page-sizes="[1, 8, 16, 32, 48]"
+				:page-size="searchForm.rows"
+				:total="totalCount"
+				layout="total, sizes, prev, pager, next, jumper"
+				@size-change="handleSizeChange"
+				@current-change="handleCurrentChange"
+			/>
+		</div>
+	</el-card>
+
+	<el-dialog :title="title" :visible.sync="dialogVisible" width="40%">
+		<el-form :model="bookDto" label-width="90px" style="width: 520px;">
+			<el-form-item label="ID">
+				<el-input v-model="bookDto.id" disabled="true" autocomplete="off" placeholder="ID自动生成"></el-input>
+			</el-form-item>
+			<el-form-item label="名称">
+				<el-input v-model="bookDto.name" autocomplete="off"></el-input>
+			</el-form-item>
+			<el-form-item label="内容">
+				<el-input v-model="bookDto.content" autocomplete="off"></el-input>
+			</el-form-item>
+			<el-form-item label="描述">
+				<el-input v-model="bookDto.describe" autocomplete="off"></el-input>
+			</el-form-item>
+		</el-form>
+		<div slot="footer" class="dialog-footer">
+			<el-button :loading="genLoading" @click="dialogVisible = false">取 消</el-button>
+			<el-button type="primary" :loading="genLoading" @click="deal">确 定</el-button>
+		</div>
+	</el-dialog>
+
+</div>
+
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    var myApp = new Vue({
+        el: '#app',
+        data: {
+            // 表格加载条控制
+            tableLoading: false,
+            // 按钮加载条控制
+            genLoading: false,
+            // Table数据
+            tableData: [],
+            // Table数据总条数
+            totalCount: 0,
+            // Table选择的数据
+            multipleSelection: [],
+            // 查询条件
+            searchForm: {
+                // 当前页
+                page: 1,
+                // 每页条数
+                rows: 8,
+                // 查询关键字
+                keyword: ''
+            },
+            // 表详细弹出框标题
+            title: '添加',
+            // 表详细弹出框是否显示
+            dialogVisible: false,
+            // 操作对象
+            bookDto: {
+                // ID
+                id: 1,
+                // 名称
+                name: '',
+                // 内容
+                content: '',
+                // 描述
+                describe: ''
+            }
+        },
+        // 启动时就执行
+        mounted: function() {
+            // ES信息查询
+            // this.queryES();
+            // 列表查询
+            this.list(this.searchForm);
+        },
+        methods: {
+            // 查询ES信息
+            queryES: function() {
+                axios.get('/high/es').then(res => {
+                    console.log(res);
+				}).catch(err => {
+					console.log(err);
+					this.$message.error('查询失败');
+				});
+            },
+            // 每页条数改变
+            handleSizeChange: function(rows) {
+                this.searchForm.rows = rows;
+                // console.log(this.searchForm.rows);
+                // 刷新列表
+                this.list(this.searchForm);
+            },
+            // 当前页数改变
+            handleCurrentChange: function(page) {
+                this.searchForm.page = page;
+                // 刷新列表
+                this.list(this.searchForm);
+            },
+            // 选择数据改变触发事件
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            // 列表查询
+            list: function(searchForm) {
+                // 加载显示
+                this.tableLoading = true;
+                axios.get('/high/book', {
+                    params: {
+                        'page': this.searchForm.page,
+                        'rows': this.searchForm.rows,
+                        'keyword': this.searchForm.keyword
+                    }
+                }).then(res => {
+                    // console.log(res);
+                    var data = res.data.data;
+                    this.tableData = data.data;
+                    this.totalCount = data.count;
+                }).catch(err => {
+					console.log(err);
+					this.$message.error('查询失败');
+                }).then(() => {
+                    this.tableLoading = false;
+            	});
+            },
+            // 添加
+            preAdd: function() {
+                this.genLoading = true;
+                // this.$nextTick Dom渲染完执行
+				this.$nextTick(() => {
+				    this.title = "添加";
+				    this.bookDto = {};
+				    this.dialogVisible = true;
+				    this.genLoading = false;
+				});
+            },
+            // 预修改
+            preById: function(row) {
+                this.genLoading = true;
+                this.title = "修改";
+                this.dialogVisible = true;
+                axios.get('/high/book/' + row.id).then(res => {
+                    // console.log(res);
+					this.bookDto = res.data.data;
+                }).catch(err => {
+                    console.log(err);
+                    this.$message.error('查询失败');
+                }).then(() => {
+                    this.genLoading = false;
+                });
+            },
+            // 添加或者修改
+            deal: function() {
+                this.genLoading = true;
+                if (this.bookDto.id) {
+                    // ID存在修改
+                    axios.put('/high/book', this.bookDto).then(res => {
+                        if (res.data.code == 200) {
+                            this.$message({
+								message: res.data.msg,
+								type: 'success'
+                            });
+                            this.dialogVisible = false;
+                            // 列表查询必须慢点，ES没有事务性，查询太快，数据还没更新
+                            this.tableLoading = true;
+                            setTimeout(() => {this.list(this.searchForm);}, 1000);
+                        } else {
+                            this.$message.error('修改失败');
+                        }
+                    }).catch(err => {
+                        console.log(err);
+                        this.$message.error('修改失败');
+                    }).then(() => {
+                        this.genLoading = false;
+                    });
+                } else {
+                    // ID不存在添加
+                    axios.post('/high/book', this.bookDto).then(res => {
+                        if (res.data.code == 200) {
+                            this.$message({
+								message: res.data.msg,
+								type: 'success'
+                            });
+                            this.dialogVisible = false;
+                            // 列表查询必须慢点，ES没有事务性，查询太快，数据还没更新
+                            this.tableLoading = true;
+                            setTimeout(() => {this.list(this.searchForm);}, 1000);
+                        } else {
+                            this.$message.error('添加失败');
+                        }
+                    }).catch(err => {
+                        console.log(err);
+                        this.$message.error('添加失败');
+                    }).then(() => {
+                        this.genLoading = false;
+                    });
+                }
+			},
+            // 删除
+            delById: function (row) {
+                this.genLoading = true;
+                this.$confirm('是否确定删除', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios.delete('/high/book/' + row.id).then(res => {
+                        if (res.data.code == 200) {
+                            this.$message({
+								message: res.data.msg,
+								type: 'success'
+                            });
+                            // 列表查询必须慢点，ES没有事务性，查询太快，数据还没更新
+                            this.tableLoading = true;
+                            setTimeout(() => {this.list(this.searchForm);}, 1000);
+                        } else {
+                            this.$message.error('删除失败');
+                        }
+                    }).catch(err => {
+                        console.log(err);
+                        this.$message.error('删除失败');
+                    }).then(() => {
+                        this.genLoading = false;
+                    });
+                }).catch(() => {
+                    this.genLoading = false;
+                });
+            }
+        }
+    });
+    /*]]>*/
+</script>
+
+</body>
+
+</html>

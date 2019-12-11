@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="headJq(title)">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">加载中</title>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon"/>
+    <!-- 引入jquery，Moment，socket.io -->
+    <!--<script th:src="@{js/jquery.min.js}"></script>
+    <script th:src="@{js/moment.min.js}"></script>
+    <script th:src="@{js/socket.io.js}"></script>-->
+</head>
+
+<head th:fragment="headVue(title)">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">加载中</title>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{element-ui/index.css}">
+    <style>
+        /* elementUI的确认弹出框时页面右侧缩小5px的解决方法 */
+        body {
+            padding-right:0 !important;
+        }
+        /* elementUI的Table表头错位的解决方法 */
+        body .el-table th.gutter {
+            display: table-cell!important;
+        }
+        body .el-table colgroup.gutter {
+            display: table-cell!important;
+        }
+        label {
+            font-weight: 700;
+        }
+    </style>
+    <!-- 引入Vue，Element UI，Axios，Moment，socket.io -->
+    <script th:src="@{js/vue.min.js}"></script>
+    <script th:src="@{element-ui/index.js}"></script>
+    <script th:src="@{js/axios.min.js}"></script>
+    <script th:src="@{js/moment.min.js}"></script>
+    <!--<script th:src="@{js/socket.io.js}"></script>-->
+</head>
+
+</html>
