@@ -1,0 +1,27 @@
+server:
+  port: 8881
+
+spring:
+  application:
+    name: provider-service
+
+demo:
+  service:
+    version: 1.0
+
+embedded:
+  zookeeper:
+    port: 2181
+
+dubbo:
+  application:
+    name: ${spring.application.name}
+  scan:
+    # É¨ÃèService×¢½â
+    base-packages: com.demo.service
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: zookeeper://127.0.0.1:${embedded.zookeeper.port}
+    file: ${user.home}/dubbo-cache/${spring.application.name}/dubbo.cache
