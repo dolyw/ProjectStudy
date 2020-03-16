@@ -152,7 +152,11 @@
                 connect() {
                     this.logOutShowFlag = true;
                     this.socket = io.connect("localhost:9090", {
-                        'query': 'userName=' + this.userName
+                        'query': 'userName=' + this.userName,
+                        // 放弃之前尝试重新连接的次数，默认值 Infinity
+                        'reconnectionAttempts': 3,
+                        // 每次连接等待时间 默认值 1000
+                        'reconnectionDelay': 3000
                     });
                     // 监听receiveMsg接收消息事件
                     this.socket.on('receiveMsg', (data) => {

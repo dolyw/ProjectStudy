@@ -23,7 +23,11 @@
             userName = prompt("请输入用户名进入聊天室");
             if ($.trim(userName)) {
                 socket = io.connect("localhost:9090", {
-                    'query': 'userName=' + userName
+                    'query': 'userName=' + userName,
+                    // 放弃之前尝试重新连接的次数，默认值 Infinity
+                    'reconnectionAttempts': 3,
+                    // 每次连接等待时间 默认值 1000
+                    'reconnectionDelay': 3000
                 });
 
                 // 成功连接事件
