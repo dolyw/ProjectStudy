@@ -1,0 +1,20 @@
+server:
+  port: 8888
+
+udp:
+  port: 7777
+
+asyncThreadPool:
+  # 核心线程池大小
+  corePoolSize: 15
+  # 最大线程数
+  maxPoolSize: 30
+  # 队列容量
+  queueCapacity: 150
+  # 活跃时间
+  keepAliveSeconds: 60
+  # 主线程等待子线程执行时间
+  awaitTerminationSeconds: 60
+  # 线程名字前缀
+  threadNamePrefix: thread-pool-task-executor-
+
