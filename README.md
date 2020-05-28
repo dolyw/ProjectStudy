@@ -13,6 +13,8 @@
 - [Netty](#netty)
 - [Dubbo](#dubbo)
 - [JavaSource](#javasource)
+- [SpringBoot](#springboot)
+- [DesignPattern](#designpattern)
 
 #### 其他
 
@@ -56,6 +58,22 @@ Dubbo学习系列示例代码及教程
 Java源码学习
 
 * [Java源码学习](https://github.com/dolyw/ProjectStudy/tree/master/JavaSource)
+
+#### SpringBoot
+
+> [https://note.dolyw.com/springboot/](https://note.dolyw.com/springboot/)
+
+SpringBoot学习
+
+* [SpringBoot学习](https://github.com/dolyw/ProjectStudy/tree/master/SpringBoot)
+
+#### DesignPattern
+
+> [https://note.dolyw.com/design/](https://note.dolyw.com/design/)
+
+设计模式学习
+
+* [设计模式学习](https://github.com/dolyw/ProjectStudy/tree/master/DesignPattern)
 
 #### 参与贡献
 

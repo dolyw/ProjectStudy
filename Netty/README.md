@@ -1,6 +1,6 @@
 # NettyStudy
 
-> 目录: [https://github.com/dolyw/ProjectStudy](https://github.com/dolyw/ProjectStudy)
+> 目录: [https://note.dolyw.com/netty](https://note.dolyw.com/netty)
 
 #### 项目目录
 

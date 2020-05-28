@@ -1,6 +1,6 @@
 # Dubbo
 
-> 目录: [https://github.com/dolyw/ProjectStudy](https://github.com/dolyw/ProjectStudy)
+> 目录: [https://note.dolyw.com/dubbo](https://note.dolyw.com/dubbo)
 
 #### 项目目录
 

@@ -1,6 +1,6 @@
 # Elasticsearch
 
-> 目录: [https://github.com/dolyw/ProjectStudy](https://github.com/dolyw/ProjectStudy)
+> 目录: [https://note.dolyw.com/elasticsearch](https://note.dolyw.com/elasticsearch)
 
 #### 项目目录
 
