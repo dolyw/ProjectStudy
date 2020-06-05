@@ -9,7 +9,7 @@
 
 ## 1. 前言
 
-一般现在用于生产环境的 Dubbo 注册中心都是 ZooKeeper，那我们首先启动 ZooKeeper，安装可以查看: [ZooKeeper安装使用](00-ZooKeeper-Use.html)
+一般现在用于生产环境的 Dubbo 注册中心都是 ZooKeeper，那我们首先启动 ZooKeeper，安装可以查看: [ZooKeeper安装使用](https://note.dolyw.com/dubbo/00-ZooKeeper-Use.html)
 
 ## 2. 创建
 
