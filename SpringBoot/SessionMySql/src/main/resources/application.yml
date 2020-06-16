@@ -1,0 +1,25 @@
+server:
+  port: 8889
+  servlet:
+    session:
+      # Session超时时间
+      timeout: 30m
+
+spring:
+  session:
+    # Spring Session使用存储类型
+    # 使用jdbc，如果不想用可以填none
+    store-type: jdbc
+    jdbc:
+      # 初始化数据库schema的SQL脚本
+      schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
+      # 用于存储会话的数据库表名
+      table-name: SPRING_SESSION
+      # 如果有需要，在启动时可创建必要的Session表。如果默认的表名已经配置或者个性化模式中已经配置，则自动启动
+      initialize-schema: always
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/dev?useSSL=false&serverTimezone=UTC&characterEncoding=utf8
+    username: root
+    password: root
+

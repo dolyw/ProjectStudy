@@ -1,0 +1,12 @@
+server:
+  port: 8888
+
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  session:
+    # Spring Session使用存储类型
+    # SpirngBoot默认就是使用Redis方式，如果不想用可以填none
+    store-type: redis
+

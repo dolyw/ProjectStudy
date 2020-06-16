@@ -153,7 +153,7 @@ public class UdpServer {
      * @date 2020/5/20 15:12
      */
     @ServiceActivator(inputChannel = "udpHandle1")
-    public void udpMessageHandle(String message) throws Exception {
+    public void udpMessageHandle(String message, @Headers Map<String, Object> headers) throws Exception {
         // 可以进行异步处理
         businessService.udpHandleMethod(message);
         logger.info("UDP1:" + message);
@@ -169,7 +169,7 @@ public class UdpServer {
      * @date 2020/5/14 11:02
      */
     @ServiceActivator(inputChannel = "udpHandle2")
-    public void udpMessageHandle2(String message) throws Exception {
+    public void udpMessageHandle2(String message, @Headers Map<String, Object> headers) throws Exception {
         logger.info("UDP2:" + message);
     }
 
