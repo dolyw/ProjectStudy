@@ -95,7 +95,7 @@ public class EncrypBase64 {
         String encodeMsg = EncrypBase64.encode(msg);
         //System.out.println("JDK1.8明文是:" + msg);
         //System.out.println("JDK1.8加密后:" + encodeMsg);
-        //System.out.println("解密后:" + EncrypBase64.decode(encodeMsg));
+        System.out.println("解密后:" + EncrypBase64.decode("aHR0cDovL2xvY2FsaG9zdDo4MDgwLz9hdXRoU3RhdGU9MQ=="));
     }
 
 }

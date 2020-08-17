@@ -8,9 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetSocketAddress;
+import java.net.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -306,6 +304,15 @@ public class TestOther {
         String s1 = "gdser";
         String s2 = new String("王");
         System.out.println(HmacSha256Util.hmacSha256(s2, s1));
+    }
+
+    @Test
+    public void t10() throws Exception {
+        String s1 = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=http://vass.ngrok2.xiaomiqiu.cn/portal/getCode?reqUrl=REQURL&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect";
+        String s2 = URLEncoder.encode(s1, "UTF-8");
+        String s3 = URLDecoder.decode(s2, "UTF-8");
+        System.out.println(s2);
+        System.out.println(s3);
     }
 
     public static void main(String[] args) throws Exception {
