@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.*;
+import java.sql.SQLOutput;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -313,6 +314,18 @@ public class TestOther {
         String s3 = URLDecoder.decode(s2, "UTF-8");
         System.out.println(s2);
         System.out.println(s3);
+    }
+
+    @Test
+    public void t11() throws Exception {
+        String[] premiumArray = {"11300","31300","13600","37700","23300","64600","27400","76000","45300","125900",
+                "65900","182900","113000","313900","140000","388900","11304","31296","13596","37704","23304",
+                "64596","27396","75996","45300","125904","65904","182904","113004","313896","140004","388896",
+                "11397","31395","13696","37797","23398","64703","27501","76099","45398","125995","66001","182997",
+                "113103","313996","140097","389005"};
+        Set<String> premiumSet = new HashSet<>(Arrays.asList(premiumArray));
+        System.out.println(premiumSet.contains("11298"));
+        System.out.println(premiumSet.contains("11297"));
     }
 
     public static void main(String[] args) throws Exception {

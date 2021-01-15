@@ -40,6 +40,7 @@ public class T00_CollectionTest {
         // queue.add(2);
         // queue.add(3);
         System.out.println(queue);
+
     }
 
 }

@@ -3,8 +3,13 @@ package com.example.controller;
 import com.example.redisson.OrderDto;
 import com.example.redisson.RedissonDelayedEnum;
 import com.example.redisson.RedissonDelayedUtil;
+import org.redisson.RedissonFairLock;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Redisson延时队列测试
@@ -17,10 +22,15 @@ import org.springframework.web.bind.annotation.*;
 public class WebController {
 
     @Autowired
+    private RedissonClient redissonClient;
+
+    @Autowired
     private RedissonDelayedUtil redissonDelayedUtil;
 
     @GetMapping
-    public String hello() {
+    public String hello() throws Exception {
+        RLock lock = redissonClient.getLock("order:11123");
+        lock.lock(10, TimeUnit.SECONDS);
         return "Hello World";
     }
 
