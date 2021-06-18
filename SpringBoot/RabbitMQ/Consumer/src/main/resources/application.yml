@@ -1,0 +1,23 @@
+server:
+  port: 8082
+
+spring:
+  application: consumer
+  # Rabbitmq≈‰÷√
+  rabbitmq:
+    virtual-host: /
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+
+rabbitmq:
+  simpleQueue:
+    name: simpleQueue
+  workQueue:
+    name: workQueue
+  publishSubscribe:
+    name: publishSubscribeExchange
+    queue1: publishSubscribeQueue1
+    queue2: publishSubscribeQueue2
+    queue3: publishSubscribeQueue3

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.net.*;
 import java.sql.SQLOutput;
 import java.text.DateFormat;
@@ -326,6 +327,27 @@ public class TestOther {
         Set<String> premiumSet = new HashSet<>(Arrays.asList(premiumArray));
         System.out.println(premiumSet.contains("11298"));
         System.out.println(premiumSet.contains("11297"));
+    }
+
+    @Test
+    public void t12() {
+        String fileName = "E:\\Work\\My File\\202102\\分公司官网、微店业务归属信息20210129.xlsx";
+        List<Map<Integer, String>> listMap = EasyExcel.read(fileName).sheet(1).doReadSync();
+        for (Map<Integer, String> data : listMap) {
+            // 返回每条数据的键值对 表示所在的列 和所在列的值
+            // logger.info("读取到数据:{}", JSON.toJSONString(data));
+            String[] nameArray = { data.get(6), data.get(4), data.get(3)};
+            for (String str : data.get(6).split("\n")) {
+                // logger.info("INSERT INTO `dh_order_00`.`t_salesman_area` (`region_code`, `salesman_code`, `salesman_name`) VALUES ('{}', '{}', '{}');",str.trim(), nameArray[1].trim(), nameArray[2].trim());
+                logger.info("INSERT INTO `dh_order_00`.`t_salesman_unit` (`shareholder_unit`, `salesman_code`, `salesman_name`) VALUES ('{}', '{}', '{}');",str.trim(), nameArray[1].trim(), nameArray[2].trim());
+            }
+        }
+    }
+
+    @Test
+    public void testMoney() {
+        BigDecimal orderAmt = new BigDecimal("0005.5").divide(new BigDecimal("100"));
+        System.out.println(orderAmt.setScale(2, BigDecimal.ROUND_HALF_UP).toString());
     }
 
     public static void main(String[] args) throws Exception {
