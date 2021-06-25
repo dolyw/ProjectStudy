@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 1. 简单队列模式配置
+ * 1. SimpleQueue模式配置
  *
  * 一对一，一个生产者，一个消费者
  *
@@ -17,13 +17,13 @@ import org.springframework.context.annotation.Configuration;
 public class SimpleQueueConfig {
 
     /**
-     * 简单队列名称
+     * SimpleQueue队列名称
      */
     @Value("${rabbitmq.simpleQueue.name}")
     private String simpleQueueName;
 
     /**
-     * 声明一个简单队列
+     * 声明一个SimpleQueue队列
      *
      * @return
      */

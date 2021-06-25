@@ -2,8 +2,9 @@ server:
   port: 8082
 
 spring:
-  application: consumer
-  # Rabbitmq����
+  application:
+    name: consumer
+  # RabbitMQ配置
   rabbitmq:
     virtual-host: /
     host: 127.0.0.1
@@ -11,6 +12,7 @@ spring:
     username: guest
     password: guest
 
+# RabbitMQ交换机及队列名称配置
 rabbitmq:
   simpleQueue:
     name: simpleQueue
@@ -21,3 +23,21 @@ rabbitmq:
     queue1: publishSubscribeQueue1
     queue2: publishSubscribeQueue2
     queue3: publishSubscribeQueue3
+  routing:
+    name: routingExchange
+    queue1: routingQueue1
+    queueRoutingKey1:
+    queue2: routingQueue2
+    queueRoutingKey2: app
+    queue3: routingQueue3
+    queueRoutingKey3: pc
+  topics:
+      name: topicsExchange
+      queue1: topicsQueue1
+      queueRoutingKey1:
+      queue2: topicsQueue2
+      # 特殊字符转义
+      queueRoutingKey2: "*"
+      queue3: topicsQueue3
+      # 特殊字符转义
+      queueRoutingKey3: "#"

@@ -2,8 +2,9 @@ server:
   port: 8081
 
 spring:
-  application: producer
-  # Rabbitmq����
+  application:
+    name: producer
+  # RabbitMQ配置
   rabbitmq:
     virtual-host: /
     host: 127.0.0.1
@@ -11,6 +12,7 @@ spring:
     username: guest
     password: guest
 
+# RabbitMQ交换机及队列名称配置
 rabbitmq:
   simpleQueue:
     name: simpleQueue
@@ -18,3 +20,10 @@ rabbitmq:
     name: workQueue
   publishSubscribe:
     name: publishSubscribeExchange
+  routing:
+    name: routingExchange
+    queueRoutingKey1:
+    queueRoutingKey2: app
+    queueRoutingKey3: pc
+  topics:
+    name: topicsExchange

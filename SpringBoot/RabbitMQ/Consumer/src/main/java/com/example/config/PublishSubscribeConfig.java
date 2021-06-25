@@ -9,12 +9,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 3. 发布订阅模式配置
+ * 3. Publish/Subscribe模式配置
  *
  * 生产者将消息不是直接发送到队列，而是发送到交换机
- * 然后由交换机发送给两个队列，多个消费者各自监听一个队列，来消费消息
+ * 然后由交换机发送给多个绑定队列
+ * 多个消费者各自监听一个队列，来消费消息
  *
  * 这种方式实现同一个消息被多个消费者消费
+ *
+ * 交换机四种模式
+ * 1. 直连交换机：Direct exchange：匹配RoutingKey路由键
+ * 2. 扇形交换机：Fanout exchange：忽略RoutingKey路由键
+ * 3. 主体交换机：Topic exchange：模糊匹配RoutingKey路由键
+ * 4. 头部交换机：Headers exchange：忽略RoutingKey路由键，通过Headers信息匹配
  *
  * @author wliduo[i@dolyw.com]
  * @date 2021/6/18 14:22
@@ -95,7 +102,7 @@ public class PublishSubscribeConfig {
      * @return
      */
     @Bean
-    public Binding binding1(FanoutExchange publishSubscribe, Queue publishSubscribeQueue1) {
+    public Binding publishSubscribeBinding1(FanoutExchange publishSubscribe, Queue publishSubscribeQueue1) {
         return BindingBuilder.bind(publishSubscribeQueue1).to(publishSubscribe);
     }
 
@@ -106,7 +113,7 @@ public class PublishSubscribeConfig {
      * @return
      */
     @Bean
-    public Binding binding2(FanoutExchange publishSubscribe, Queue publishSubscribeQueue2) {
+    public Binding publishSubscribeBinding2(FanoutExchange publishSubscribe, Queue publishSubscribeQueue2) {
         return BindingBuilder.bind(publishSubscribeQueue2).to(publishSubscribe);
     }
 
@@ -117,7 +124,7 @@ public class PublishSubscribeConfig {
      * @return
      */
     @Bean
-    public Binding binding3(FanoutExchange publishSubscribe, Queue publishSubscribeQueue3) {
+    public Binding publishSubscribeBinding3(FanoutExchange publishSubscribe, Queue publishSubscribeQueue3) {
         return BindingBuilder.bind(publishSubscribeQueue3).to(publishSubscribe);
     }
 

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 工作队列消费
+ * 2. WorkQueues模式配置
  *
  * 一对多，一个生产者，多个消费者竞争消费消息
  *
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * @date 2021/6/18 15:13
  */
 @Component
-public class WorkQueueReceiver {
+public class WorkQueuesReceiver {
 
     @Autowired
     private BusinessService businessService;
@@ -27,7 +27,7 @@ public class WorkQueueReceiver {
      */
     @RabbitListener(queues = "${rabbitmq.workQueue.name}")
     public void receive(String message) {
-        System.out.println(" [WorkQueue] Received1 '" + message + "'");
+        System.out.println(" [WorkQueues] Received1 '" + message + "'");
         // 给业务类处理
         businessService.handle(message);
     }
@@ -38,7 +38,7 @@ public class WorkQueueReceiver {
      */
     @RabbitListener(queues = "${rabbitmq.workQueue.name}")
     public void receive2(String message) {
-        System.out.println(" [WorkQueue] Received2 '" + message + "'");
+        System.out.println(" [WorkQueues] Received2 '" + message + "'");
         // 给业务类处理
         businessService.handle(message);
     }
@@ -49,7 +49,7 @@ public class WorkQueueReceiver {
      */
     @RabbitListener(queues = "${rabbitmq.workQueue.name}")
     public void receive3(String message) {
-        System.out.println(" [WorkQueue] Received3 '" + message + "'");
+        System.out.println(" [WorkQueues] Received3 '" + message + "'");
         // 给业务类处理
         businessService.handle(message);
     }

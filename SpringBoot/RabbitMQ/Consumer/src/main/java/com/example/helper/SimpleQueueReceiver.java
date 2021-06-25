@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 简单队列消费
+ * 1. SimpleQueue模式配置
  *
  * 一对一，一个生产者，一个消费者
  *
