@@ -11,6 +11,10 @@ spring:
     port: 5672
     username: guest
     password: guest
+    # 配置更新 https://blog.csdn.net/yaomingyang/article/details/108410286
+    publisher-confirm-type: correlated
+    publisher-returns: true
+
 
 # RabbitMQ交换机及队列名称配置
 rabbitmq:
@@ -27,3 +31,7 @@ rabbitmq:
     queueRoutingKey3: pc
   topics:
     name: topicsExchange
+  ackQueue:
+    name: ackQueue
+  orderQueue:
+    name: orderQueue

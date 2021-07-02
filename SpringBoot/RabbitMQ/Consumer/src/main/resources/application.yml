@@ -11,6 +11,23 @@ spring:
     port: 5672
     username: guest
     password: guest
+    listener:
+      direct:
+        acknowledge-mode: manual
+        retry:
+          enabled: true
+          max-attempts: 3
+          # 重试初始间隔时间
+          initial-interval: 3000ms
+          multiplier: 2
+      simple:
+        acknowledge-mode: manual
+        retry:
+          enabled: true
+          max-attempts: 3
+          # 重试初始间隔时间
+          initial-interval: 3000ms
+          multiplier: 2
 
 # RabbitMQ交换机及队列名称配置
 rabbitmq:
@@ -32,12 +49,21 @@ rabbitmq:
     queue3: routingQueue3
     queueRoutingKey3: pc
   topics:
-      name: topicsExchange
-      queue1: topicsQueue1
-      queueRoutingKey1:
-      queue2: topicsQueue2
-      # 特殊字符转义
-      queueRoutingKey2: "*"
-      queue3: topicsQueue3
-      # 特殊字符转义
-      queueRoutingKey3: "#"
+    name: topicsExchange
+    queue1: topicsQueue1
+    queueRoutingKey1:
+    queue2: topicsQueue2
+    # 特殊字符转义
+    queueRoutingKey2: "*"
+    queue3: topicsQueue3
+    # 特殊字符转义
+    queueRoutingKey3: "#"
+  ackQueue:
+    name: ackQueue
+  orderQueue:
+    name: orderQueue
+  deadLetterExchange:
+    name: deadLetterExchange
+    routingKey:
+  deadLetterQueue:
+    name: deadLetter

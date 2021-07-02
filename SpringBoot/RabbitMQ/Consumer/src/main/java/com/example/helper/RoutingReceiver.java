@@ -1,9 +1,13 @@
 package com.example.helper;
 
 import com.example.service.BusinessService;
+import com.rabbitmq.client.Channel;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 /**
  * 4. Routing模式配置
@@ -45,10 +49,14 @@ public class RoutingReceiver {
      * @param message
      */
     @RabbitListener(queues = "${rabbitmq.routing.queue2}")
-    public void receive2(String message) {
-        System.out.println(" [Routing] Received2 '" + message + "'");
+    public void receive2(String text, Channel channel, Message message) throws IOException {
+        System.out.println(" [Routing] Received2 '" + text + "'");
         // 给业务类处理
-        businessService.handle(message);
+        // businessService.handle(message);
+        if (businessService.handle(text)) {
+            // 消息ACK确认
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+        }
     }
 
     /**

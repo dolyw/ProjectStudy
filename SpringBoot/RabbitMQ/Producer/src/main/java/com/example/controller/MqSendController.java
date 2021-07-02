@@ -2,6 +2,11 @@ package com.example.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessageDeliveryMode;
+import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 /**
  * MQ发送API接口
@@ -68,6 +75,18 @@ public class MqSendController {
      */
     @Value("${rabbitmq.topics.name}")
     private String topicsName;
+
+    /**
+     * ACK队列名称
+     */
+    @Value("${rabbitmq.ackQueue.name}")
+    private String ackQueueName;
+
+    /**
+     * 订单过期普通队列名称
+     */
+    @Value("${rabbitmq.orderQueue.name}")
+    private String orderQueue;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -162,6 +181,68 @@ public class MqSendController {
         // rabbitTemplate.convertAndSend(topicsName, "", text);
         // rabbitTemplate.convertAndSend(topicsName, "a", text);
         rabbitTemplate.convertAndSend(topicsName, "a.a", text);
+        return text;
+    }
+
+    /**
+     * 开启Ack发送MQ消息
+     *
+     * @param text
+     * @return java.lang.String
+     * @throws
+     * @author wliduo[i@dolyw.com]
+     * @date 2021/6/29 17:55
+     */
+    @ApiOperation(value="开启Ack发送MQ消息", notes="开启Ack发送MQ消息", produces="application/json")
+    @PostMapping("/sendAck")
+    public String sendAck(@RequestBody String text) throws Exception {
+        CorrelationData correlationData = new CorrelationData();
+        // Id直接设置为消息内容
+        correlationData.setId(text);
+        // 发送带上correlationData
+        rabbitTemplate.convertAndSend(ackQueueName, (Object) text, correlationData);
+        rabbitTemplate.convertAndSend(topicsName, "a.a", text, correlationData);
+        /*correlationData.setId(UUID.randomUUID().toString());
+        Message message = MessageBuilder.withBody(text.getBytes())
+                // 持久化设置
+                .setDeliveryMode(MessageDeliveryMode.PERSISTENT)
+                .setContentType(MessageProperties.CONTENT_TYPE_TEXT_PLAIN)
+                // 消息过期时间
+                .setExpiration("10000")
+                .setCorrelationId(correlationData.getId()).build();
+        rabbitTemplate.convertAndSend(workQueueName, message, correlationData);
+        rabbitTemplate.convertAndSend(topicsName, "a.a", message, correlationData);*/
+        return text;
+    }
+
+    /**
+     * 订单过期队列发送MQ消息
+     *
+     * @param text
+     * @return java.lang.String
+     * @throws
+     * @author wliduo[i@dolyw.com]
+     * @date 2021/7/2 16:55
+     */
+    @ApiOperation(value="订单过期队列发送MQ消息", notes="订单过期队列发送MQ消息", produces="application/json")
+    @PostMapping("/sendOrder")
+    public String sendOrder(@RequestBody String text) throws Exception {
+        CorrelationData correlationData = new CorrelationData();
+        // Id直接设置为消息内容
+        correlationData.setId(text);
+        // 发送带上correlationData
+        // rabbitTemplate.convertAndSend(orderQueue, (Object) text, correlationData);
+        // correlationData.setId(UUID.randomUUID().toString());
+        // 队列有设置消息过期时间，且消息本身也有过期时间，以短的过期时间为准
+        Message message = MessageBuilder.withBody(text.getBytes())
+                // 持久化设置
+                .setDeliveryMode(MessageDeliveryMode.PERSISTENT)
+                .setContentType(MessageProperties.CONTENT_TYPE_TEXT_PLAIN)
+                // 消息过期时间
+                .setExpiration("5000")
+                .setCorrelationId(correlationData.getId())
+                .build();
+        rabbitTemplate.convertAndSend(orderQueue, message, correlationData);
         return text;
     }
 
