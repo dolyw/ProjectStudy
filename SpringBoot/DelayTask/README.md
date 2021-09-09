@@ -638,12 +638,14 @@ Redis 键通知是不可靠的
 
 ### 6.1. RabbitMQ
 
-由于使用死信交换器比较麻烦，所以推荐使用第二种实现方式 rabbitmq-delayed-message-exchange 插件的方式实现延迟队列
-
 * RabbitMQ 的 TTL 和 DXL 实现延迟队列，通过消息过期后进入死信交换器，再由交换器转发到延迟消费队列
 * 使用 rabbitmq-delayed-message-exchange 插件实现延迟功能
 
 延迟插件 rabbitmq-delayed-message-exchange 是在 RabbitMQ 3.5.7 及以上的版本才支持的，依赖 Erlang/OPT 18.0 及以上运行环境
+
+* [RabbitMQ的使用 - 死信队列](https://note.dolyw.com/mq/11-RabbitMQ-Use.html#_3-%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97)
+
+由于使用死信交换器比较麻烦，所以推荐使用第二种实现方式 rabbitmq-delayed-message-exchange 插件的方式实现延迟队列
 
 **参考**
 

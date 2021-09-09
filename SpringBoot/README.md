@@ -9,6 +9,9 @@ SpringBoot学习示例项目
 * **AsyncDemo**: [SpringBoot下异步Async注解的使用](https://note.dolyw.com/springboot/11-Async.html)，[SpringBoot下接收TCP/UDP消息后异步操作](https://note.dolyw.com/network/10-SpringBoot-UDP.html)
 * **SessionRedis**: [SpringBoot下分布式Session保存到Redis](https://note.dolyw.com/distributed/10-Distributed-Session.html)
 * **SessionMySql**: [SpringBoot下分布式Session保存到MySql](https://note.dolyw.com/distributed/10-Distributed-Session.html)
+* **DelayTask**: [延迟任务场景技术选型](https://note.dolyw.com/distributed/25-Delay-Task.html)
+* **DistributedID**: [浅析分布式ID](https://note.dolyw.com/distributed/13-Distributed-ID.html)
+* **RabbitMQ**: [RabbitMQ的使用](https://note.dolyw.com/mq/11-RabbitMQ-Use.html)
 
 #### 软件架构
 
