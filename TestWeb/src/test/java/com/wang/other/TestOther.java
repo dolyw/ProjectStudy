@@ -315,6 +315,14 @@ public class TestOther {
         String s3 = URLDecoder.decode(s2, "UTF-8");
         System.out.println(s2);
         System.out.println(s3);
+
+        Integer i1 = 50000;
+        Integer i2 = 50000;
+        System.out.println(i1.equals(i2));
+
+        System.out.println("/PayController/elifePayback".contains("PayController/elifePayback"));
+        int i = 0;
+        System.out.println(String.format("P%d*S%d * (1-0) * (S%d/Q%d)", i+2, i+2, i+2, i+2));
     }
 
     @Test
@@ -348,6 +356,8 @@ public class TestOther {
     public void testMoney() {
         BigDecimal orderAmt = new BigDecimal("0005.5").divide(new BigDecimal("100"));
         System.out.println(orderAmt.setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+
+        System.out.println(new BigDecimal("A0"));
     }
 
     public static void main(String[] args) throws Exception {
