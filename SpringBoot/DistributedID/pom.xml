@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <hutool-all.version>5.7.2</hutool-all.version>
     </properties>
 
     <dependencies>
@@ -41,6 +42,13 @@
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!-- hutool -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool-all.version}</version>
         </dependency>
 
     </dependencies>
