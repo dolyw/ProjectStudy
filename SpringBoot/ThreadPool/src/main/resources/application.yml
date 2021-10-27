@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+threadPool:
+  # 核心线程池大小
+  corePoolSize: 15
+  # 最大线程数
+  maxPoolSize: 30
+  # 队列容量
+  queueCapacity: 15
+  # 活跃时间
+  keepAliveSeconds: 60
+  # 主线程等待子线程执行时间
+  awaitTerminationSeconds: 60
+  # Spring线程名字前缀
+  springThreadNamePrefix: spring-thread-pool-
+  # Jdk线程名字前缀
+  jdkThreadNamePrefix: jdk-thread-pool-
+  # IO密集线程名字前缀
+  ioThreadNamePrefix: io-thread-pool-
+  # CPU密集线程名字前缀
+  cpuThreadNamePrefix: cpu-thread-pool-
+
