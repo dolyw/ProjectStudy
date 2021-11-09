@@ -27,14 +27,10 @@ public class SmsUtil {
      * @date 2020/5/20 10:53
      */
     @Async("jdkThreadPoolExecutor")
-    public void sendCode(String phone, String code) {
+    public void sendCode(String phone, String code) throws Exception {
         logger.info("开始发送验证码...");
         // 模拟调用接口发验证码的耗时
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(3000);
         logger.info("发送成功: {}", phone);
     }
 
