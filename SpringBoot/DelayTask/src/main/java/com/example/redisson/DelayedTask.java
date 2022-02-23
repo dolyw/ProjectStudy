@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * 延时任务启动执行，自动消费
+ * https://www.jianshu.com/p/f80f833ab8f6
  *
  * @author wliduo[i@dolyw.com]
  * @date 2020/8/14 17:01

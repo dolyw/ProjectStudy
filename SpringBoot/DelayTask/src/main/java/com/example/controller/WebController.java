@@ -3,12 +3,13 @@ package com.example.controller;
 import com.example.redisson.OrderDto;
 import com.example.redisson.RedissonDelayedEnum;
 import com.example.redisson.RedissonDelayedUtil;
-import org.redisson.RedissonFairLock;
+import com.example.redisson.RedisLockHelper;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileInputStream;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -50,6 +51,22 @@ public class WebController {
                 new OrderDto(String.valueOf(System.currentTimeMillis()), name),
                 RedissonDelayedEnum.ORDER_DEFAULT_EVALUATION.delay,
                 RedissonDelayedEnum.ORDER_DEFAULT_EVALUATION.timeUnit);
+    }
+
+    @Autowired
+    private RedisLockHelper redisLockHelper;
+
+    @GetMapping("test")
+    public void test() {
+        try {
+            redisLockHelper.tryLock("order:pay:" + 1, () -> {
+                // 业务逻辑
+                FileInputStream fileInputStream = null;
+                fileInputStream.read();
+            });
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
 }
