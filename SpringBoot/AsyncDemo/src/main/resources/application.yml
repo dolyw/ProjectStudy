@@ -10,7 +10,7 @@ asyncThreadPool:
   # 最大线程数
   maxPoolSize: 30
   # 队列容量
-  queueCapacity: 150
+  queueCapacity: 15
   # 活跃时间
   keepAliveSeconds: 60
   # 主线程等待子线程执行时间

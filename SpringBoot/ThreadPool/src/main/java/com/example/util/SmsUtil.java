@@ -34,4 +34,11 @@ public class SmsUtil {
         logger.info("发送成功: {}", phone);
     }
 
+    public void send(String phone, String code) throws Exception {
+        logger.info("开始发送验证码...");
+        // 模拟调用接口发验证码的耗时
+        Thread.sleep(3000);
+        logger.info("发送成功: {}", phone);
+    }
+
 }

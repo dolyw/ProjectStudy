@@ -57,9 +57,9 @@ public class ThreadPoolConfig {
         // 最大线程数
         threadPoolTaskExecutor.setMaxPoolSize(maxPoolSize);
         // 队列容量
-        threadPoolTaskExecutor.setQueueCapacity(keepAliveSeconds);
+        threadPoolTaskExecutor.setQueueCapacity(queueCapacity);
         // 活跃时间
-        threadPoolTaskExecutor.setKeepAliveSeconds(queueCapacity);
+        threadPoolTaskExecutor.setKeepAliveSeconds(keepAliveSeconds);
         // 主线程等待子线程执行时间
         threadPoolTaskExecutor.setAwaitTerminationSeconds(awaitTerminationSeconds);
         // 线程名字前缀

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -64,6 +65,7 @@ public class JdkThreadPoolConfig {
                 corePoolSize,
                 maxPoolSize,
                 keepAliveSeconds, TimeUnit.SECONDS,
+                // new LinkedBlockingQueue<>(queueCapacity),
                 new ResizableCapacityLinkedBlockingQueue<>(queueCapacity),
                 new CustomizableThreadFactory(threadNamePrefix),
                 new ThreadPoolExecutor.CallerRunsPolicy());
