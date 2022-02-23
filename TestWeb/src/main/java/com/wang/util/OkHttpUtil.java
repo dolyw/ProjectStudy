@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * OkHttpUtil
@@ -45,14 +46,17 @@ public class OkHttpUtil {
      */
     public static String get(String url) {
         String result = null;
-        OkHttpClient client = new OkHttpClient.Builder().build();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS).build();
         Request request = new Request.Builder().url(url).build();
-        logger.info("请求地址:{}", url);
+        // logger.info("请求地址:{}", url);
         try (Response response = client.newCall(request).execute()) {
             result = response.body().string();
-            logger.info("请求地址:{}，请求结果:{}", url, result);
+            // logger.info("请求地址:{}，请求结果:{}", url, result);
         } catch (Exception e) {
-            logger.error("请求地址:{}，请求异常:{}", url, ExceptionUtil.stacktraceToOneLineString(e));
+            // logger.error("请求地址:{}，请求异常:{}", url, ExceptionUtil.stacktraceToOneLineString(e));
         }
         return result;
     }
@@ -98,8 +102,7 @@ public class OkHttpUtil {
         RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, json);
         Request request = new Request.Builder().url(url).post(requestBody).build();
         logger.info("请求地址:{}，请求参数:{}", url, json);
-        try {
-            Response response = httpClient.newCall(request).execute();
+        try (Response response = httpClient.newCall(request).execute()) {
             result = response.body().string();
             logger.info("请求地址:{}，请求参数:{}，请求结果:{}", url, json, result);
         } catch (IOException e) {

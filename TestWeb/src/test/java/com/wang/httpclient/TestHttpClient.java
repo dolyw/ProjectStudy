@@ -1,5 +1,6 @@
 package com.wang.httpclient;
 
+import com.wang.util.OkHttpUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -74,5 +75,17 @@ public class TestHttpClient {
             }
 
         }
+    }
+
+    @Test
+    public void test2() throws Exception {
+        for (Integer i = 0; i < 40; i++) {
+            // Thread.sleep(500L);
+            new Thread(() -> {
+                Long timeBegin = System.currentTimeMillis();
+                System.out.println(Thread.currentThread().getName() + ":" + OkHttpUtil.get("http://localhost:9999/test/priview") + ":" + (System.currentTimeMillis() - timeBegin) / 1000.0D);
+            }, "thread" + i).start();
+        }
+        System.in.read();
     }
 }
