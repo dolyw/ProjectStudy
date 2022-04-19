@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
  * 如果ID生成不频繁，则生成的就是全是偶数
  * 改良版雪花算法，解决全为偶数问题，保证低并发时奇偶交替
  *
+ * 时钟回拨问题直接抛出异常，过于简单
+ * 优化如果时间偏差大小小于5ms，则等待两倍时间重试一次，加强可用性
+ *
  * SnowFlake的结构如下(每部分用-分开):<br>
  * 0 - 0000000000 0000000000 0000000000 0000000000 0 - 00000 - 00000 - 000000000000 <br>
  * 1位标识，由于long基本类型在Java中是带符号的，最高位是符号位，正数是0，负数是1，所以id一般是正数，最高位是0<br>
@@ -141,9 +144,28 @@ public class IdWorkerUpdate {
 
         // 如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
         if (timestamp < lastTimestamp) {
-            logger.error("clock is moving backwards.  Rejecting requests until {}.", lastTimestamp);
-            throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds",
-                    lastTimestamp - timestamp));
+            long offset = lastTimestamp - timestamp;
+            if (offset <= 5) {
+                try {
+                    // 时间偏差大小小于5ms，则等待两倍时间重试一次
+                    wait(offset << 1);
+                    timestamp = timeGen();
+                    if (timestamp < lastTimestamp) {
+                        // 还是小于，抛异常
+                        logger.error("clock is moving backwards.  Rejecting requests until {}.", lastTimestamp);
+                        throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds",
+                                lastTimestamp - timestamp));
+                    }
+                } catch (InterruptedException e) {
+                    logger.error("clock is moving backwards.  Rejecting requests until {}.", lastTimestamp);
+                    throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds",
+                            lastTimestamp - timestamp));
+                }
+            } else {
+                logger.error("clock is moving backwards.  Rejecting requests until {}.", lastTimestamp);
+                throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds",
+                        lastTimestamp - timestamp));
+            }
         }
 
         // 如果是同一时间生成的，则进行毫秒内序列
@@ -207,10 +229,10 @@ public class IdWorkerUpdate {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        IdWorkerUpdate idWorkerPatchi = new IdWorkerUpdate(0L, 0L, 0L);
+        IdWorkerUpdate idWorkerPatch = new IdWorkerUpdate(0L, 0L, 0L);
         for (int i = 0; i < 10; i++) {
             Thread.sleep(1000L);
-            logger.info("{}", idWorkerPatchi.nextId());
+            logger.info("{}", idWorkerPatch.nextId());
         }
     }
 
