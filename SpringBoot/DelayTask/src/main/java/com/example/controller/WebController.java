@@ -57,7 +57,20 @@ public class WebController {
     private RedisLockHelper redisLockHelper;
 
     @GetMapping("test")
-    public void test() {
+    public void test() throws Exception {
+
+        redisLockHelper.tryLock("", () -> {
+            // 业务逻辑
+            FileInputStream fileInputStream = null;
+            fileInputStream.read();
+        });
+
+        String redisLockKey = "";
+        redisLockHelper.lock(redisLockKey, () -> {
+            // 业务逻辑
+            // ...
+        });
+
         try {
             redisLockHelper.tryLock("order:pay:" + 1, () -> {
                 // 业务逻辑

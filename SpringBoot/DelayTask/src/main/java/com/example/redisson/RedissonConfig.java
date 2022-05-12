@@ -78,7 +78,7 @@ public class RedissonConfig {
             redissonClient = Redisson.create(config);
             return redissonClient;
         } catch (Exception e) {
-            logger.error("RedissonClient init redis url:[{}], Exception:", url, e);
+            logger.error("RedissonClient Init Url:[{}], Exception: {}", url, e);
             return null;
         }
     }
