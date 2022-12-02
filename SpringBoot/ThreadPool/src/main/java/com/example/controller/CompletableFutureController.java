@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * AsyncController
+ * CompletableFutureController
+ *
+ * https://www.cnblogs.com/happyliu/archive/2018/08/12/9462703.html
  *
  * @author wliduo[i@dolyw.com]
  * @date 2020/5/19 14:46
@@ -58,6 +59,7 @@ public class CompletableFutureController {
             } catch (Exception e) {
 
             }
+            throw new RuntimeException();
         });
         CompletableFuture completableFuture2 = CompletableFuture.runAsync(() -> {
             try {

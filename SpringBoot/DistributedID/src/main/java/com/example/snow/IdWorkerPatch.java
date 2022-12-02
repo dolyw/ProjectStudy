@@ -81,12 +81,12 @@ public class IdWorkerPatch {
     /**
      * 机器ID所占的位数
      */
-    private long workerIdBits = 4L;
+    private long workerIdBits = 5L;
 
     /**
      * 数据标识ID所占的位数
      */
-    private long datacenterIdBits = 4L;
+    private long datacenterIdBits = 5L;
 
     /**
      * 支持的最大机器ID，结果是31 (这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
@@ -101,7 +101,7 @@ public class IdWorkerPatch {
     /**
      * 序列在ID中占的位数
      */
-    private long sequenceBits = 10L;
+    private long sequenceBits = 12L;
 
     /**
      * 机器ID向左移12位

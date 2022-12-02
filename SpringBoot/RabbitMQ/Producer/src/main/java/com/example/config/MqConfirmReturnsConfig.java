@@ -44,7 +44,7 @@ public class MqConfirmReturnsConfig implements RabbitTemplate.ConfirmCallback, R
         System.out.println(b);
         System.out.println(s);
         // 需要在发送的时候同时传递correlationData才能获取
-        // 提前使用Id和消息内容绑定在缓存，Id可以任意
+        // 提前使用Id和消息内容绑定在缓存或者数据库消息记录表，Id可以任意
         // 或者也可以直接将Id设置为消息体即可
         System.out.println(correlationData.toString());
         /*ReturnedMessage returnedMessage = correlationData.getReturned();

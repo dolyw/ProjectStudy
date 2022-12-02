@@ -1,5 +1,7 @@
 package com.wang.other;
 
+import cn.hutool.core.text.StrPool;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import com.wang.model.HttpCode;
@@ -358,6 +360,13 @@ public class TestOther {
         System.out.println(orderAmt.setScale(2, BigDecimal.ROUND_HALF_UP).toString());
 
         System.out.println(new BigDecimal("A0"));
+    }
+
+    @Test
+    public void testNode() {
+        String node = "orderList[12]";
+        String index = node.substring(node.indexOf(StrPool.BRACKET_START) + 1, node.indexOf(StrPool.BRACKET_END));
+        System.out.println(index);
     }
 
     public static void main(String[] args) throws Exception {
