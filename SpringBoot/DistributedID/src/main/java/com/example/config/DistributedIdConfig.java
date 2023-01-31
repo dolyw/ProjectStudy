@@ -2,6 +2,7 @@ package com.example.config;
 
 import cn.hutool.core.util.RandomUtil;
 import com.example.snow.generator.IdWorkerUpdate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,8 +15,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DistributedIdConfig {
 
+    @Value("${workId:0}")
+    private long workerId;
+
     /**
-     * 启动随机生成数据中心ID和WordID，每次重新启动应用尾号段进行刷新
+     * 启动创建
      *
      * @param
      * @return com.pcic.app.generator.IdWorker
@@ -24,8 +28,11 @@ public class DistributedIdConfig {
      * @date 2021/9/2 16:44
      */
     @Bean
-    public IdWorkerUpdate idWorkerPatch() {
-        return new IdWorkerUpdate(RandomUtil.randomLong(0, 15), RandomUtil.randomLong(0, 15), 0L);
+    public IdWorkerUpdate idWorkerUpdate() {
+        // 启动随机生成工作机器ID
+        // return new IdWorkerUpdate(RandomUtil.randomLong(0, 31), 0L);
+        // 启动读取配置工作机器ID
+        return new IdWorkerUpdate(workerId, 0L);
     }
 
 }

@@ -1,12 +1,16 @@
-package com.example.snow.generator;
+package com.example.snow;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.management.ManagementFactory;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
+import java.util.regex.Pattern;
+
 /**
- * 调整版-Twitter的SnowFlake算法<br>
- * 移除数据中心，只保留工作机器ID够用即可，支持32台机器集群
- * 集群32台1毫秒有4096*32=13w，一般业务够用了，再可以自定义两位前缀方便识别ID
+ * 改良版-Twitter的SnowFlake算法<br>
  *
  * 由于跨毫秒后，最后的Sequence累加就会清零，末位为偶数
  * 如果ID生成不频繁，则生成的就是全是偶数
@@ -14,6 +18,9 @@ import org.slf4j.LoggerFactory;
  *
  * 时钟回拨问题直接抛出异常，过于简单
  * 优化如果时间偏差大小小于5ms，则等待两倍时间重试一次，加强可用性
+ *
+ * 根据网络MAC和IP地址及JvmID取余自动设定workerId及datacenterId
+ * https://gitee.com/yu120/sequence
  *
  * SnowFlake的结构如下(每部分用-分开):<br>
  * 0 - 0000000000 0000000000 0000000000 0000000000 0 - 00000 - 00000 - 000000000000 <br>
@@ -28,14 +35,14 @@ import org.slf4j.LoggerFactory;
  * 经测试，SnowFlake每秒能够产生26万ID左右
  *
  * @author wliduo[i@dolyw.com]
- * @date 2023/1/31 9:28
+ * @date 2021/1/15 11:31
  */
-public class IdWorkerUpdate {
+public class IdWorkerPatch2 {
 
     /**
      * logger
      */
-    private static final Logger logger = LoggerFactory.getLogger(IdWorkerUpdate.class);
+    private static final Logger logger = LoggerFactory.getLogger(IdWorkerPatch2.class);
 
     /**
      * 工作机器ID(0~31)
@@ -45,52 +52,65 @@ public class IdWorkerUpdate {
     /**
      * 数据中心ID(0~31)
      */
-    // private long datacenterId;
+    private long datacenterId;
 
     /**
      * 毫秒内序列(0~4095)
      */
     private long sequence;
 
-    /**
-     * 构造函数
-     *
-     * @param workerId
-     * @param datacenterId
-     * @param sequence
-     */
-    /*public IdWorkerUpdate(long workerId, long datacenterId, long sequence) {
-        // sanity check for workerId
-        if (workerId > maxWorkerId || workerId < 0L) {
-            throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
-        }
-        if (datacenterId > maxDatacenterId || datacenterId < 0L) {
-            throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0", maxDatacenterId));
-        }
-        logger.info("worker starting. timestamp left shift {}, datacenter id bits {}, worker id bits {}, sequence bits {}, workerid {}",
-                timestampLeftShift, datacenterIdBits, workerIdBits, sequenceBits, workerId);
-
-        this.workerId = workerId;
-        this.datacenterId = datacenterId;
-        this.sequence = sequence;
-    }*/
+    private static volatile InetAddress LOCAL_ADDRESS = null;
+    private static final Pattern IP_PATTERN = Pattern.compile("\\d{1,3}(\\.\\d{1,3}){3,5}$");
 
     /**
      * 构造函数
-     *
-     * @param workerId
-     * @param sequence
      */
-    public IdWorkerUpdate(long workerId, long sequence) {
-        // sanity check for workerId
-        if (workerId > maxWorkerId || workerId < 0L) {
-            throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
-        }
-        logger.info("worker starting. timestamp left shift {}, worker id bits {}, sequence bits {}, workerid {}",
-                timestampLeftShift, workerIdBits, sequenceBits, workerId);
+    public IdWorkerPatch2() {
+        this.datacenterId = getDatacenterId();
+        this.workerId = getMaxWorkerId(datacenterId);
+    }
 
-        this.workerId = workerId;
-        this.sequence = sequence;
+    /**
+     * 基于网卡MAC地址计算余数作为数据中心
+     * <p>
+     * 可自定扩展
+     */
+    protected long getDatacenterId() {
+        long id = 0L;
+        try {
+            NetworkInterface network = NetworkInterface.getByInetAddress(getLocalAddress());
+            if (null == network) {
+                id = 1L;
+            } else {
+                byte[] mac = network.getHardwareAddress();
+                if (null != mac) {
+                    id = ((0x000000FF & (long) mac[mac.length - 2]) | (0x0000FF00 & (((long) mac[mac.length - 1]) << 8))) >> 6;
+                    id = id % (maxDatacenterId + 1);
+                }
+            }
+        } catch (Exception e) {
+            logger.warn(" getDatacenterId: " + e.getMessage());
+        }
+
+        return id;
+    }
+
+    /**
+     * 基于 MAC + PID 的 hashcode 获取16个低位
+     * <p>
+     * 可自定扩展
+     */
+    protected long getMaxWorkerId(long datacenterId) {
+        StringBuilder mpId = new StringBuilder();
+        mpId.append(datacenterId);
+        String name = ManagementFactory.getRuntimeMXBean().getName();
+        if (name != null && name.length() > 0) {
+            // GET jvmPid
+            mpId.append(name.split("@")[0]);
+        }
+
+        // MAC + PID 的 hashcode 获取16个低位
+        return (mpId.toString().hashCode() & 0xffff) % (maxWorkerId + 1);
     }
 
     /**
@@ -106,7 +126,7 @@ public class IdWorkerUpdate {
     /**
      * 数据标识ID所占的位数
      */
-    // private long datacenterIdBits = 5L;
+    private long datacenterIdBits = 5L;
 
     /**
      * 支持的最大机器ID，结果是31 (这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
@@ -116,7 +136,7 @@ public class IdWorkerUpdate {
     /**
      * 支持的最大数据标识ID，结果是31
      */
-    // private long maxDatacenterId = -1L ^ (-1L << datacenterIdBits);
+    private long maxDatacenterId = -1L ^ (-1L << datacenterIdBits);
 
     /**
      * 序列在ID中占的位数
@@ -131,13 +151,12 @@ public class IdWorkerUpdate {
     /**
      * 数据标识ID向左移17位(12+5)
      */
-    // private long datacenterIdShift = sequenceBits + workerIdBits;
+    private long datacenterIdShift = sequenceBits + workerIdBits;
 
     /**
      * 时间截向左移22位(5+5+12)
      */
-    // private long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
-    private long timestampLeftShift = sequenceBits + workerIdBits;
+    private long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
 
     /**
      * 生成序列的掩码，这里为4095(0b111111111111=0xfff=4095)
@@ -212,7 +231,7 @@ public class IdWorkerUpdate {
 
         // 移位并通过或运算拼到一起组成64位的ID
         return ((timestamp - twepoch) << timestampLeftShift) |
-                // (datacenterId << datacenterIdShift) |
+                (datacenterId << datacenterIdShift) |
                 (workerId << workerIdShift) |
                 sequence;
     }
@@ -229,6 +248,70 @@ public class IdWorkerUpdate {
             timestamp = timeGen();
         }
         return timestamp;
+    }
+
+    /**
+     * Find first valid IP from local network card
+     *
+     * @return first valid local IP
+     */
+    public static InetAddress getLocalAddress() {
+        if (LOCAL_ADDRESS != null) {
+            return LOCAL_ADDRESS;
+        }
+
+        LOCAL_ADDRESS = getLocalAddress0();
+        return LOCAL_ADDRESS;
+    }
+
+    private static InetAddress getLocalAddress0() {
+        InetAddress localAddress = null;
+        try {
+            localAddress = InetAddress.getLocalHost();
+            if (isValidAddress(localAddress)) {
+                return localAddress;
+            }
+        } catch (Throwable e) {
+            logger.warn("Failed to retrieving ip address, " + e.getMessage(), e);
+        }
+
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            if (interfaces != null) {
+                while (interfaces.hasMoreElements()) {
+                    try {
+                        NetworkInterface network = interfaces.nextElement();
+                        Enumeration<InetAddress> addresses = network.getInetAddresses();
+                        while (addresses.hasMoreElements()) {
+                            try {
+                                InetAddress address = addresses.nextElement();
+                                if (isValidAddress(address)) {
+                                    return address;
+                                }
+                            } catch (Throwable e) {
+                                logger.warn("Failed to retrieving ip address, " + e.getMessage(), e);
+                            }
+                        }
+                    } catch (Throwable e) {
+                        logger.warn("Failed to retrieving ip address, " + e.getMessage(), e);
+                    }
+                }
+            }
+        } catch (Throwable e) {
+            logger.warn("Failed to retrieving ip address, " + e.getMessage(), e);
+        }
+
+        logger.error("Could not get local host ip address, will use 127.0.0.1 instead.");
+        return localAddress;
+    }
+
+    private static boolean isValidAddress(InetAddress address) {
+        if (address == null || address.isLoopbackAddress()) {
+            return false;
+        }
+
+        String name = address.getHostAddress();
+        return (name != null && !"0.0.0.0".equals(name) && !"127.0.0.1".equals(name) && IP_PATTERN.matcher(name).matches());
     }
 
     /**
@@ -249,10 +332,10 @@ public class IdWorkerUpdate {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        IdWorkerUpdate idWorkerUpdate = new IdWorkerUpdate(15L, 0L);
+        IdWorkerPatch2 idWorkerPatch = new IdWorkerPatch2();
         for (int i = 0; i < 10; i++) {
             Thread.sleep(1000L);
-            logger.info("{}", idWorkerUpdate.nextId());
+            logger.info("{}", idWorkerPatch.nextId());
         }
     }
 
