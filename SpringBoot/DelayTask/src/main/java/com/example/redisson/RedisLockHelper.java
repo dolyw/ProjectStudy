@@ -1,5 +1,6 @@
 package com.example.redisson;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import java.util.concurrent.TimeUnit;
  * https://zhuanlan.zhihu.com/p/128131107
  * https://zhuanlan.zhihu.com/p/130327922
  * https://gitee.com/zlt2000/microservices-platform/tree/master/zlt-commons/zlt-common-core/src/main/java/com/central/common/lock
+ * https://www.cnblogs.com/luao/p/14633264.html
  *
  * @author wliduo[i@dolyw.com]
  * @date 2021/9/15 15:33
@@ -85,10 +87,10 @@ public class RedisLockHelper {
      * 加锁业务处理
      *
      * @param lockKey
-	 * @param fair
-	 * @param time
-	 * @param unit
-	 * @param handle
+     * @param fair
+     * @param time
+     * @param unit
+     * @param handle
      * @return void
      * @throws
      * @author wliduo[i@dolyw.com]
@@ -100,7 +102,13 @@ public class RedisLockHelper {
             rLock.lock(time, unit);
             handle.execute();
         } finally {
-            rLock.unlock();
+            try {
+                if (rLock.isLocked() && rLock.isHeldByCurrentThread()) {
+                    rLock.unlock();
+                }
+            } catch (Exception e) {
+                logger.warn("释放锁Key：{}，异常：{}", lockKey, ExceptionUtil.stacktraceToOneLineString(e), e);
+            }
         }
     }
 
@@ -142,7 +150,13 @@ public class RedisLockHelper {
             rLock.lock(time, unit);
             return handle.execute();
         } finally {
-            rLock.unlock();
+            try {
+                if (rLock.isLocked() && rLock.isHeldByCurrentThread()) {
+                    rLock.unlock();
+                }
+            } catch (Exception e) {
+                logger.warn("释放锁Key：{}，异常：{}", lockKey, ExceptionUtil.stacktraceToOneLineString(e), e);
+            }
         }
     }
 
@@ -161,7 +175,7 @@ public class RedisLockHelper {
      * 尝试获取锁
      *
      * @param lockKey
-	 * @param fair 公平锁
+     * @param fair 公平锁
      * @return java.lang.Boolean
      * @throws
      * @author wliduo[i@dolyw.com]
@@ -204,11 +218,11 @@ public class RedisLockHelper {
      * 尝试加锁业务处理
      *
      * @param lockKey
-	 * @param fair
-	 * @param wait
-	 * @param release
-	 * @param unit
-	 * @param handle
+     * @param fair
+     * @param wait
+     * @param release
+     * @param unit
+     * @param handle
      * @return void
      * @throws
      * @author wliduo[i@dolyw.com]
@@ -222,7 +236,13 @@ public class RedisLockHelper {
         try {
             handle.execute();
         } finally {
-            rLock.unlock();
+            try {
+                if (rLock.isLocked() && rLock.isHeldByCurrentThread()) {
+                    rLock.unlock();
+                }
+            } catch (Exception e) {
+                logger.warn("释放锁Key：{}，异常：{}", lockKey, ExceptionUtil.stacktraceToOneLineString(e), e);
+            }
         }
     }
 
@@ -249,11 +269,11 @@ public class RedisLockHelper {
      * 返回值尝试加锁业务处理
      *
      * @param lockKey
-	 * @param fair
-	 * @param wait
-	 * @param release
-	 * @param unit
-	 * @param handle
+     * @param fair
+     * @param wait
+     * @param release
+     * @param unit
+     * @param handle
      * @return T
      * @throws
      * @author wliduo[i@dolyw.com]
@@ -267,7 +287,13 @@ public class RedisLockHelper {
         try {
             return handle.execute();
         } finally {
-            rLock.unlock();
+            try {
+                if (rLock.isLocked() && rLock.isHeldByCurrentThread()) {
+                    rLock.unlock();
+                }
+            } catch (Exception e) {
+                logger.warn("释放锁Key：{}，异常：{}", lockKey, ExceptionUtil.stacktraceToOneLineString(e), e);
+            }
         }
     }
 
