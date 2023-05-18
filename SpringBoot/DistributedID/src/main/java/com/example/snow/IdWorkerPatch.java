@@ -58,6 +58,8 @@ public class IdWorkerPatch {
      * @param sequence
      */
     public IdWorkerPatch(long workerId, long datacenterId, long sequence) {
+        logger.info("SnowFlake Starting. timestampLeftShift {}, datacenterIdBits {}, workerIdBits {}, sequenceBits {}",
+                timestampLeftShift, datacenterIdBits, workerIdBits, sequenceBits);
         // sanity check for workerId
         if (workerId > maxWorkerId || workerId < 0L) {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
@@ -65,12 +67,10 @@ public class IdWorkerPatch {
         if (datacenterId > maxDatacenterId || datacenterId < 0L) {
             throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0", maxDatacenterId));
         }
-        logger.info("worker starting. timestamp left shift {}, datacenter id bits {}, worker id bits {}, sequence bits {}, workerid {}",
-                timestampLeftShift, datacenterIdBits, workerIdBits, sequenceBits, workerId);
-
         this.workerId = workerId;
         this.datacenterId = datacenterId;
         this.sequence = sequence;
+        logger.info("SnowFlake Ending. workerId {}, datacenterId {}, sequence {}", workerId, datacenterId, sequence);
     }
 
     /**
@@ -228,7 +228,7 @@ public class IdWorkerPatch {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        IdWorkerPatch idWorkerPatch = new IdWorkerPatch(15L, 15L, 0L);
+        IdWorkerPatch idWorkerPatch = new IdWorkerPatch(19L, 31L, 2L);
         for (int i = 0; i < 10; i++) {
             Thread.sleep(1000L);
             logger.info("{}", idWorkerPatch.nextId());

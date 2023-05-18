@@ -1,5 +1,6 @@
 package com.example.snow;
 
+import cn.hutool.core.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,58 +60,23 @@ public class IdWorkerPatch2 {
      */
     private long sequence;
 
-    private static volatile InetAddress LOCAL_ADDRESS = null;
-    private static final Pattern IP_PATTERN = Pattern.compile("\\d{1,3}(\\.\\d{1,3}){3,5}$");
-
     /**
      * 构造函数
      */
     public IdWorkerPatch2() {
+        logger.info("SnowFlake Starting. timestampLeftShift {}, datacenterIdBits {}, workerIdBits {}, sequenceBits {}",
+                timestampLeftShift, datacenterIdBits, workerIdBits, sequenceBits);
         this.datacenterId = getDatacenterId();
-        this.workerId = getMaxWorkerId(datacenterId);
-    }
-
-    /**
-     * 基于网卡MAC地址计算余数作为数据中心
-     * <p>
-     * 可自定扩展
-     */
-    protected long getDatacenterId() {
-        long id = 0L;
-        try {
-            NetworkInterface network = NetworkInterface.getByInetAddress(getLocalAddress());
-            if (null == network) {
-                id = 1L;
-            } else {
-                byte[] mac = network.getHardwareAddress();
-                if (null != mac) {
-                    id = ((0x000000FF & (long) mac[mac.length - 2]) | (0x0000FF00 & (((long) mac[mac.length - 1]) << 8))) >> 6;
-                    id = id % (maxDatacenterId + 1);
-                }
-            }
-        } catch (Exception e) {
-            logger.warn(" getDatacenterId: " + e.getMessage());
+        this.workerId = getMaxWorkerId(this.datacenterId);
+        logger.info("SnowFlake Running. workerId {}, datacenterId {}, sequence {}", workerId, datacenterId, sequence);
+        // sanity check for workerId
+        if (this.workerId > maxWorkerId || this.workerId < 0L) {
+            this.workerId = RandomUtil.randomLong(0, 31);
         }
-
-        return id;
-    }
-
-    /**
-     * 基于 MAC + PID 的 hashcode 获取16个低位
-     * <p>
-     * 可自定扩展
-     */
-    protected long getMaxWorkerId(long datacenterId) {
-        StringBuilder mpId = new StringBuilder();
-        mpId.append(datacenterId);
-        String name = ManagementFactory.getRuntimeMXBean().getName();
-        if (name != null && name.length() > 0) {
-            // GET jvmPid
-            mpId.append(name.split("@")[0]);
+        if (this.datacenterId > maxDatacenterId || this.datacenterId < 0L) {
+            this.datacenterId = RandomUtil.randomLong(0, 31);
         }
-
-        // MAC + PID 的 hashcode 获取16个低位
-        return (mpId.toString().hashCode() & 0xffff) % (maxWorkerId + 1);
+        logger.info("SnowFlake Ending. workerId {}, datacenterId {}, sequence {}", workerId, datacenterId, sequence);
     }
 
     /**
@@ -172,6 +138,16 @@ public class IdWorkerPatch2 {
      * 上一次的序列号，解决并发量小总是偶数的问题
      */
     private long lastSequence = 0L;
+
+    /**
+     * IP正则表达式
+     */
+    private static final Pattern IP_PATTERN = Pattern.compile("\\d{1,3}(\\.\\d{1,3}){3,5}$");
+
+    /**
+     * 本机地址
+     */
+    private static volatile InetAddress LOCAL_ADDRESS = null;
 
     /**
      * 获得下一个ID (该方法是线程安全的)
@@ -251,20 +227,57 @@ public class IdWorkerPatch2 {
     }
 
     /**
+     * 基于网卡MAC地址计算余数作为数据中心
+     * <p>
+     * 可自定扩展
+     */
+    protected long getDatacenterId() {
+        try {
+            long id = 0L;
+            if (LOCAL_ADDRESS == null) {
+                LOCAL_ADDRESS = getLocalAddress();
+            }
+            NetworkInterface network = NetworkInterface.getByInetAddress(LOCAL_ADDRESS);
+            byte[] mac = network.getHardwareAddress();
+            if (null != mac) {
+                id = ((0x000000FF & (long) mac[mac.length - 2]) | (0x0000FF00 & (((long) mac[mac.length - 1]) << 8))) >> 6;
+                id = id % (maxDatacenterId + 1);
+            }
+            return id;
+        } catch (Exception e) {
+            logger.warn("getDatacenterId: " + e.getMessage());
+            return -1L;
+        }
+    }
+
+    /**
+     * 基于 MAC + PID 的 hashcode 获取16个低位
+     * <p>
+     * 可自定扩展
+     */
+    protected long getMaxWorkerId(long datacenterId) {
+        try {
+            StringBuilder mpId = new StringBuilder();
+            mpId.append(datacenterId);
+            String name = ManagementFactory.getRuntimeMXBean().getName();
+            if (name != null && name.length() > 0) {
+                // GET jvmPid
+                mpId.append(name.split("@")[0]);
+            }
+            // MAC + PID 的 hashcode 获取16个低位
+            return (mpId.toString().hashCode() & 0xffff) % (maxWorkerId + 1);
+        } catch (Exception e) {
+            logger.warn("getMaxWorkerId: " + e.getMessage());
+            return -1L;
+        }
+    }
+
+    /**
      * Find first valid IP from local network card
      *
      * @return first valid local IP
      */
-    public static InetAddress getLocalAddress() {
-        if (LOCAL_ADDRESS != null) {
-            return LOCAL_ADDRESS;
-        }
-
-        LOCAL_ADDRESS = getLocalAddress0();
-        return LOCAL_ADDRESS;
-    }
-
-    private static InetAddress getLocalAddress0() {
+    private static InetAddress getLocalAddress() {
         InetAddress localAddress = null;
         try {
             localAddress = InetAddress.getLocalHost();
@@ -305,11 +318,13 @@ public class IdWorkerPatch2 {
         return localAddress;
     }
 
+    /**
+     * local IP Valid
+     */
     private static boolean isValidAddress(InetAddress address) {
         if (address == null || address.isLoopbackAddress()) {
             return false;
         }
-
         String name = address.getHostAddress();
         return (name != null && !"0.0.0.0".equals(name) && !"127.0.0.1".equals(name) && IP_PATTERN.matcher(name).matches());
     }
