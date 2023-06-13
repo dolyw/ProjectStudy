@@ -1,6 +1,7 @@
 package com.example.snow;
 
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,8 +21,9 @@ import java.util.regex.Pattern;
  * 时钟回拨问题直接抛出异常，过于简单
  * 优化如果时间偏差大小小于5ms，则等待两倍时间重试一次，加强可用性
  *
- * 根据MAC及JvmID取余自动设定workerId及datacenterId
- * https://gitee.com/yu120/sequence
+ * 先根据IP及HostName取余自动设定workerId及datacenterId，IP比较固定
+ * 获取异常再根据MAC及JvmID取余自动设定workerId及datacenterId，过于随机
+ * 获取异常再取随机数兜底
  *
  * SnowFlake的结构如下(每部分用-分开):<br>
  * 0 - 0000000000 0000000000 0000000000 0000000000 0 - 00000 - 00000 - 000000000000 <br>
@@ -38,12 +40,12 @@ import java.util.regex.Pattern;
  * @author wliduo[i@dolyw.com]
  * @date 2021/1/15 11:31
  */
-public class IdWorkerPatch2 {
+public class IdWorkerPatch3 {
 
     /**
      * logger
      */
-    private static final Logger logger = LoggerFactory.getLogger(IdWorkerPatch2.class);
+    private static final Logger logger = LoggerFactory.getLogger(IdWorkerPatch3.class);
 
     /**
      * 工作机器ID(0~31)
@@ -63,12 +65,21 @@ public class IdWorkerPatch2 {
     /**
      * 构造函数
      */
-    public IdWorkerPatch2() {
+    public IdWorkerPatch3() {
         logger.info("SnowFlake Starting. timestampLeftShift {}, datacenterIdBits {}, workerIdBits {}, sequenceBits {}",
                 timestampLeftShift, datacenterIdBits, workerIdBits, sequenceBits);
-        this.datacenterId = getDatacenterId();
-        this.workerId = getMaxWorkerId(this.datacenterId);
-        logger.info("SnowFlake Running. workerId {}, datacenterId {}, sequence {}", workerId, datacenterId, sequence);
+        // 先根据IP及HostName取余自动设定workerId及datacenterId，IP比较固定
+        this.workerId = getWorkIdByIp();
+        this.datacenterId = getDataCenterIdByName();
+        logger.info("SnowFlake RunningIP. workerId {}, datacenterId {}, sequence {}", workerId, datacenterId, sequence);
+        // 获取异常再根据MAC及JvmID取余自动设定workerId及datacenterId，过于随机
+        if (this.workerId > maxWorkerId || this.workerId < 0L) {
+            this.workerId = getMaxWorkerId(this.datacenterId);
+        }
+        if (this.datacenterId > maxDatacenterId || this.datacenterId < 0L) {
+            this.datacenterId = getDatacenterId();
+        }
+        logger.info("SnowFlake RunningMAC. workerId {}, datacenterId {}, sequence {}", workerId, datacenterId, sequence);
         // sanity check for workerId
         if (this.workerId > maxWorkerId || this.workerId < 0L) {
             this.workerId = RandomUtil.randomLong(0, 31);
@@ -273,6 +284,69 @@ public class IdWorkerPatch2 {
     }
 
     /**
+     * WorkId使用IP生成
+     * toCodePoints按IP每位转换Int数值相加总和取余(这种方案出现重复碰撞的概率大)
+     * 优化为直接使用IP去除点符号取余，结果比较固定
+     *
+     * @return workId
+     */
+    private Long getWorkIdByIp() {
+        try {
+            String hostAddress = getLocalAddress().getHostAddress();
+            /*int[] ints = toCodePoints(hostAddress);
+            int sums = 0;
+            for (int b : ints) {
+                sums = sums + b;
+            }
+            return (long) (sums % (maxWorkerId + 1));*/
+            hostAddress = hostAddress.replace(StrUtil.DOT, StrUtil.EMPTY);
+            Long hostAddressLong = Long.parseLong(hostAddress);
+            return hostAddressLong % (maxWorkerId + 1);
+        }
+        catch (Exception e) {
+            logger.warn("getWorkIdByIp: " + e.getMessage());
+            return -1L;
+        }
+    }
+
+    /**
+     * DataCenterId使用HostName生成
+     *
+     * @return dataCenterId
+     */
+    private Long getDataCenterIdByName() {
+        try {
+            String name = ManagementFactory.getRuntimeMXBean().getName();
+            int[] ints = toCodePoints(name);
+            int sums = 0;
+            for (int i : ints) {
+                sums = sums + i;
+            }
+            return sums % (maxDatacenterId + 1);
+        }
+        catch (Exception e) {
+            logger.warn("getDataCenterIdByName: " + e.getMessage());
+            return -1L;
+        }
+    }
+
+    /**
+     * 字符转Int数组
+     *
+     * @param str
+     * @return
+     */
+    public static int[] toCodePoints(String str) {
+        int[] result = new int[str.codePointCount(0, str.length())];
+        int index = 0;
+        for(int i = 0; i < result.length; ++i) {
+            result[i] = str.codePointAt(index);
+            index += Character.charCount(result[i]);
+        }
+        return result;
+    }
+
+    /**
      * Find first valid IP from local network card
      *
      * @return first valid local IP
@@ -347,7 +421,7 @@ public class IdWorkerPatch2 {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        IdWorkerPatch2 idWorkerPatch = new IdWorkerPatch2();
+        IdWorkerPatch3 idWorkerPatch = new IdWorkerPatch3();
         for (int i = 0; i < 10; i++) {
             Thread.sleep(1000L);
             logger.info("{}", idWorkerPatch.nextId());
